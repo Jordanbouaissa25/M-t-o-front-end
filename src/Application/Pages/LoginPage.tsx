@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { FiAlignJustify } from "react-icons/fi";
 // import "./index.css"; // Assurez-vous d'importer votre fichier CSS ici
 
 export const LoginPage: React.FC = () => {
@@ -79,6 +80,10 @@ export const LoginPage: React.FC = () => {
         <div className="links">
           <a href="#">Mot de passe oublié?</a>
           <a href="#">S'INSCRIRE</a>
+          <a href="#"> Inscription gratuite</a>
+          <button type="submit" className="register-button">
+            Créer mon compte
+          </button>
         </div>
       </form>
     </div>

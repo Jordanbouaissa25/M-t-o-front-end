@@ -52,6 +52,17 @@
   cursor: pointer;
 }
 
+.register-button {
+     width: 100%;
+  padding: 10px;
+  background-color: #3E63DD;
+  border: none;
+  border-radius: 5px;
+  color: #FFFFFF;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 .links {
   margin-top: 20px;
 }
