@@ -2,78 +2,140 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Style pour la page de connexion */
+.login-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #1c2448;
+    color: #ffffff;
+}
+
+/* Style de l'en-tête */
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #1c2448;
+}
+
+.logo {
+    height: 40px;
+}
+
+.header-icons i {
+    font-size: 24px;
+    margin-left: 10px;
+}
+
+/* Conteneur du formulaire de connexion */
 .login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #1c2448;
-  color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .login-form {
-  background: #2d3658;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  text-align: center;
+    background: #2d3658;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
 }
 
+.form-title {
+    margin-bottom: 20px;
+}
+
+/* Groupes d'entrées */
 .input-group {
-  margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-.input-group input[type="email"],
-.input-group input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    color: #000000;
+    background-color: #ffffff;
 }
 
-.checkbox {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
+.checkbox-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .login-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #f8c700;
-  border: none;
-  border-radius: 5px;
-  color: #1c2448;
-  font-size: 16px;
-  cursor: pointer;
+    width: 100%;
+    padding: 10px;
+    background-color: #f8c700;
+    border: none;
+    border-radius: 5px;
+    color: #1c2448;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 15px;
 }
 
-.register-button {
-     width: 100%;
-  padding: 10px;
-  background-color: #3E63DD;
-  border: none;
-  border-radius: 5px;
-  color: #FFFFFF;
-  font-size: 16px;
-  cursor: pointer;
+.additional-links {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
 }
 
-.links {
-  margin-top: 20px;
+.forgot-password,
+.sign-up-link {
+    color: #f8c700;
+    text-decoration: none;
 }
 
-.links a {
-  color: #f8c700;
-  text-decoration: none;
-  margin: 0 5px;
+.create-account-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
 }
+
+/* Style du pied de page */
+/* .footer {
+    width: 100%;
+    padding: 10px;
+    background-color: #1c2448;
+    display: flex;
+    justify-content: space-around;
+} */
+
+.nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
 
 .error-message {
   color: red;
   margin-bottom: 10px;
+}
+
+.app-name {
+    color: white
+}
+
+.icons {
+    color: white;
+ justify-items: right;
 }

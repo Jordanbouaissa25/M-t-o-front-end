@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiAlignJustify } from "react-icons/fi";
 // import "./index.css"; // Assurez-vous d'importer votre fichier CSS ici
 
 export const LoginPage: React.FC = () => {
@@ -41,53 +40,63 @@ export const LoginPage: React.FC = () => {
     setPassword(event.target.value);
   };
 
-  return (
-    <div className="login-container">
-      <img
-        src="../../public/logo.png"
-        alt="Logo application météo"
-        className="hidden lg:block"
-      />
-      <form onSubmit={handleSubmit} className="login-form">
-        <h2>Se connecter</h2>
-        {error && <div className="error-message">{error}</div>}
-        <div className="input-group">
-          <input
-            type="email"
-            value={email}
-            onChange={handleEmailChange}
-            placeholder="Adresse mail"
-            required
-          />
+  
+    return (
+        <div className="login-page">
+            <header className="header">
+            <div className="logo-container">
+                <img src="../../public/logo.png" alt="Logo météo" className="logo" />
+                 <span className="app-name">Météo</span>
+            </div>
+                <div className="header-icons">
+                    <i className="search-icon"></i> {/* Replace with actual icon implementation */}
+                    <i className="menu-icon"></i> {/* Replace with actual icon implementation */}
+                </div>
+            </header>
+            <div className="login-container">
+                <form onSubmit={handleSubmit} className="login-form">
+                    <h2 className="form-title">Se connecter</h2>
+
+                    <div className="input-group">
+                        <input 
+                            type="email" 
+                            value={email} 
+                            onChange={handleEmailChange} 
+                            placeholder="Adresse mail" 
+                            className="input-field"
+                            required 
+                        />
+                    </div>
+
+                    <div className="input-group">
+                        <input 
+                            type="password" 
+                            value={password} 
+                            onChange={handlePasswordChange} 
+                            placeholder="Mot de passe" 
+                            className="input-field"
+                            required 
+                        />
+                    </div>
+
+                    <div className="input-group checkbox-group">
+                        <label>
+                            <input type="checkbox" /> Se souvenir de moi
+                        </label>
+                    </div>
+
+                    <button type="submit" className="login-button">Connectez-vous</button>
+                    
+                    <div className="additional-links">
+                        <a href="#" className="forgot-password">Mot de passe oublié ?</a>
+                        <a href="#" className="sign-up-link">S'INSCRIRE</a>
+                    </div>
+                    
+                    <button className="create-account-button">Créer mon compte</button>
+                </form>
+            </div>
         </div>
-        <div className="input-group">
-          <input
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-            placeholder="Mot de passe"
-            required
-          />
-        </div>
-        <div className="input-group checkbox">
-          <label>
-            <input type="checkbox" /> Se souvenir de moi
-          </label>
-        </div>
-        <button type="submit" className="login-button">
-          Connectez-vous
-        </button>
-        <div className="links">
-          <a href="#">Mot de passe oublié?</a>
-          <a href="#">S'INSCRIRE</a>
-          <a href="#"> Inscription gratuite</a>
-          <button type="submit" className="register-button">
-            Créer mon compte
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+    );
 };
 
 // Fonction factice pour simuler une requête HTTP
