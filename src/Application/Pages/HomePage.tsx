@@ -1,18 +1,20 @@
 import React from 'react'
-import { Header } from '../../Composant/Header'
 import { FiAlignJustify } from "react-icons/fi";
+import { FaSearch } from "react-icons/fa";
 
 export const HomePage = () => {
   return (
     <header className="header">
       <div className="logo-container">
         <img src="../../public/logo.png" alt="Logo météo" className="logo" />
-        <span className="app-name">Météo</span>
+        <p className='name-logo'>Météo</p>
       </div>
       <div className="icons">
-        <i className="search-icon">🔍</i>
        <FiAlignJustify />
-      </div>
+       </div>
+       <div className="icons2">
+       <FaSearch />
+       </div>
     </header>
   );
 }

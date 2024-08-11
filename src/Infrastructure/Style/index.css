@@ -7,11 +7,36 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
     height: 100vh;
     background-color: #1c2448;
     color: #ffffff;
 }
+
+.icons {
+    position: relative;
+    left: 340px;
+    color: #FEBF2C
+}
+
+.icons2 {
+    position: absolute;
+    left: 340px;
+    color: white;
+}
+.name-logo {
+   position: relative;
+    bottom: 30px;
+    left: 50px;
+    color: white;
+}
+.logo-container {
+           position: absolute; /* Position the logo absolutely within the header */
+    top: 5px; /* Adjust to move the logo closer to the top */
+    left: 5px; /* Adjust to move the logo closer to the left */
+    height: 18px; /* Keep the logo small as previously adjusted */
+}
+
 
 /* Style de l'en-tête */
 .header {
@@ -19,8 +44,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
     background-color: #1c2448;
+     padding: 10px 20px; /* Adjust padding to reduce thickness */
+    height: 50px; /* Set a fixed height */
 }
 
 .logo {
@@ -135,7 +161,4 @@
     color: white
 }
 
-.icons {
-    color: white;
- justify-items: right;
-}
+

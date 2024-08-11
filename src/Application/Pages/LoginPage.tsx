@@ -45,8 +45,6 @@ export const LoginPage: React.FC = () => {
         <div className="login-page">
             <header className="header">
             <div className="logo-container">
-                <img src="../../public/logo.png" alt="Logo météo" className="logo" />
-                 <span className="app-name">Météo</span>
             </div>
                 <div className="header-icons">
                     <i className="search-icon"></i> {/* Replace with actual icon implementation */}
