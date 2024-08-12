@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 // import "./index.css"; // Assurez-vous d'importer votre fichier CSS ici
 
 export const LoginPage: React.FC = () => {
@@ -86,11 +86,11 @@ export const LoginPage: React.FC = () => {
                     <button type="submit" className="login-button">Connectez-vous</button>
                     
                     <div className="additional-links">
-                        <a href="#" className="forgot-password">Mot de passe oublié ?</a>
-                        <a href="#" className="sign-up-link">S'INSCRIRE</a>
+                        <button className="forgot-password">Mot de passe oublié ?</button>
+                        <NavLink to="/register">S'inscrire</NavLink>
                     </div>
                     
-                    <button className="create-account-button">Créer mon compte</button>
+                    {/* <NavLink to ="create-account-button">Créer mon compte</NavLink> */}
                 </form>
             </div>
         </div>

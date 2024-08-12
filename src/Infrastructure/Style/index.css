@@ -31,7 +31,7 @@
     color: white;
 }
 .logo-container {
-           position: absolute; /* Position the logo absolutely within the header */
+    position: absolute; /* Position the logo absolutely within the header */
     top: 5px; /* Adjust to move the logo closer to the top */
     left: 5px; /* Adjust to move the logo closer to the left */
     height: 18px; /* Keep the logo small as previously adjusted */
@@ -159,6 +159,78 @@
 
 .app-name {
     color: white
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #2D2C5A;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+.headerSearch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #2D2C5A;
+}
+
+.search-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-container label {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.search-input {
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+  color: black;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  color: black;
+  font-size: 16px;
+}
+
+.footerSearch {
+  background-color: #4E94CE;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 410px;
+}
+
+.footerSearch a {
+  text-decoration: none;
+  color: black;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+   font-size: 17px;
+}
+
+.footer-iconHome {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 5px;
 }
 
 
