@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-// import "./index.css"; // Assurez-vous d'importer votre fichier CSS ici
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -11,11 +10,9 @@ export const LoginPage: React.FC = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     try {
-      // Remplacez `http.post` par votre méthode de requête HTTP
       const response = await fakeHttpPost("/login", { email, password });
       const { token, _id } = response.data;
       if (token && _id) {
-        // Remplacez `login` par votre logique de connexion
         login(token, _id);
         localStorage.setItem("token", token);
         localStorage.setItem("userId", _id);
@@ -40,61 +37,72 @@ export const LoginPage: React.FC = () => {
     setPassword(event.target.value);
   };
 
-  
-    return (
-        <div className="login-page">
-            <header className="header">
-            <div className="logo-container">
-            </div>
-                <div className="header-icons">
-                    <i className="search-icon"></i> {/* Replace with actual icon implementation */}
-                    <i className="menu-icon"></i> {/* Replace with actual icon implementation */}
-                </div>
-            </header>
-            <div className="login-container">
-                <form onSubmit={handleSubmit} className="login-form">
-                    <h2 className="form-title">Se connecter</h2>
-
-                    <div className="input-group">
-                        <input 
-                            type="email" 
-                            value={email} 
-                            onChange={handleEmailChange} 
-                            placeholder="Adresse mail" 
-                            className="input-field"
-                            required 
-                        />
-                    </div>
-
-                    <div className="input-group">
-                        <input 
-                            type="password" 
-                            value={password} 
-                            onChange={handlePasswordChange} 
-                            placeholder="Mot de passe" 
-                            className="input-field"
-                            required 
-                        />
-                    </div>
-
-                    <div className="input-group checkbox-group">
-                        <label>
-                            <input type="checkbox" /> Se souvenir de moi
-                        </label>
-                    </div>
-
-                    <button type="submit" className="login-button">Connectez-vous</button>
-                    
-                    <div className="additional-links">
-                        <button className="forgot-password">Mot de passe oublié ?</button>
-                        <NavLink to="/register">S'inscrire</NavLink>
-                    </div>
-                    
-                    {/* <NavLink to ="create-account-button">Créer mon compte</NavLink> */}
-                </form>
-            </div>
+  return (
+    <div className="flex flex-col items-center min-h-screen bg-[#1c2448] text-white">
+      <header className="w-full flex justify-between items-center bg-[#1c2448] px-5 py-2.5 h-12">
+        <div className="relative">
+          {/* Logo container */}
         </div>
-    );
+        <div className="flex">
+          <i className="search-icon text-xl ml-2.5"></i> {/* Remplacez avec une implémentation d'icône */}
+          <i className="menu-icon text-xl ml-2.5"></i> {/* Remplacez avec une implémentation d'icône */}
+        </div>
+      </header>
+      
+      <div className="flex flex-col items-center justify-center w-full">
+        <form onSubmit={handleSubmit} className="bg-[#2d3658] p-5 rounded-lg shadow-md w-[300px] text-center">
+          <h2 className="mb-5 text-2xl">Se connecter</h2>
+                <div className="relative right-20">
+                <label htmlFor="mail" className="mb-2 text-md">Adresse mail</label>
+                </div>
+          <div className="mb-5">
+            <input 
+              type="email" 
+              value={email} 
+              onChange={handleEmailChange} 
+              placeholder="Adresse mail" 
+              className="w-full p-2.5 rounded border border-gray-300 text-black bg-white"
+              required 
+            />
+          </div>
+           <div className="relative right-20">
+            <label htmlFor="password">Mot de passe</label>
+            </div>
+          <div className="mb-5">
+            <input 
+              type="password" 
+              value={password} 
+              onChange={handlePasswordChange} 
+              placeholder="Mot de passe" 
+              className="w-full p-2.5 rounded border border-gray-300 text-black bg-white"
+              required 
+            />
+          </div>
+
+          <div className="flex justify-center items-center mb-5">
+            <label className="text-sm">
+              <input type="checkbox" className="mr-2"/> Se souvenir de moi
+            </label>
+          </div>
+
+          <button type="submit" className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg mb-3 cursor-pointer">
+            Connectez-vous
+          </button>
+
+             <div className="relative w-full h-1 bg-[#007bff] mb-6">
+          <div className="absolute left-0 h-1 bg-[#f8c700]" style={{ width: '50%' }}></div>
+           </div>
+          
+          <div className="flex justify-between mb-3 text-sm">
+            <NavLink to="/reset" className="text-[#FFFFFF]">Mot de passe oublié ?</NavLink>
+            <button onClick={() => navigate("/register")} className="w-full p-2.5 bg-[#007bff] mt-0 rounded text-[#000000] text-lg cursor-pointer">
+            Créer mon compte
+          </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 // Fonction factice pour simuler une requête HTTP
@@ -108,4 +116,3 @@ async function fakeHttpPost(url: string, data: any) {
 function login(token: string, userId: string) {
   console.log("User logged in with token:", token, "and ID:", userId);
 }
-
