@@ -54,9 +54,9 @@ export const SettingsPage: React.FC = () => {
     setNewEmail(event.target.value);
   };
 
-  const handleNewPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setNewPassword(event.target.value);
-  };
+  // const handleNewPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   setNewPassword(event.target.value);
+  // };
 
   return (
     <div className="flex flex-col min-h-screen bg-[#2D2C5A] text-white">
@@ -66,12 +66,14 @@ export const SettingsPage: React.FC = () => {
           <img src="../../public/logo.png" alt="Logo météo" className="h-10" />
           <p className='ml-4 text-white'>Météo</p>
         </div>
-        <NavLink to="/Menu" className="text-[#FEBF2C]">
-          <FiAlignJustify size={24} />
-        </NavLink>
-         <NavLink to='/' className="text-white">
+        <div className="flex items-center space-x-2">
+           <NavLink to='/' className="text-white">
           <FaSearch size={24} />
         </NavLink>
+        <NavLink to="/Menu" className="text-[#FEBF2C] ">
+          <FiAlignJustify size={24} />
+        </NavLink>
+        </div>
       </header>
 
       {/* Contenu principal */}
@@ -119,21 +121,23 @@ export const SettingsPage: React.FC = () => {
         </form>
 
         <form onSubmit={handlePasswordChange} className="mt-4 w-full">
-          <h3 className="text-lg mb-2 text-white">Modifier mot de passe</h3>
-          <input
+          {/* <h3 className="text-lg mb-2 text-white">Modifier mot de passe</h3> */}
+          {/* <input
             type="password"
             value={newPassword}
             onChange={handleNewPasswordChange}
             placeholder="Nouveau mot de passe"
             className="w-full p-2.5 rounded border border-gray-300 text-black bg-white mb-4"
             required
-          />
+          /> */}
+          <NavLink to="/reset">
           <button
             type="submit"
             className="p-2.5 bg-[#4e94ce] rounded text-white w-full"
           >
-            Modifier mot de passe
+            Reinitialiser mot de passe
           </button>
+          </NavLink>
         </form>
 
         {error && <div className="text-red-500 mt-4">{error}</div>}
