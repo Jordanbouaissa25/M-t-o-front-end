@@ -16,81 +16,71 @@ export const ResetPage: React.FC = () => {
     }
 
     try {
-      const response = await fakeHttpPost("/reset", { email, password });
-      const { token, _id } = response.data;
-      if (token && _id) {
-        login(token, _id);
-        localStorage.setItem("token", token);
-        localStorage.setItem("userId", _id);
-
-        console.log("Reinitialisation réussie");
-        console.log("token", token);
-        console.log("UserId", _id);
-
-        navigate("/login"); // Rediriger l'utilisateur après une reinitialisation réussie
+      const response = await fakeHttpPost("/user", { email, password });
+      const { success } = response.data;
+      if (success) {
+        console.log("Mot de passe réinitialisé avec succès");
+        navigate("/login"); // Rediriger l'utilisateur après une réinitialisation réussie
       }
     } catch (error: unknown) {
-      console.error("Erreur de reinitialisation:", error);
-      setError("Erreur lors de la reinitialisation. Veuillez réessayer.");
+      console.error("Erreur de réinitialisation:", error);
+      setError("Erreur lors de la réinitialisation. Veuillez réessayer.");
     }
   };
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-[#1c2448] text-white p-4">
       <form onSubmit={handleSubmit} className="bg-[#2d3658] p-6 rounded-lg shadow-md w-[300px] text-center">
-        <h2 className="mb-6 text-2xl font-semibold">S'inscrire</h2>
+        <h2 className="mb-6 text-2xl font-semibold">Réinitialisation mot de passe</h2>
 
-        <div className="relative right-20">
-                <label htmlFor="mail" className="mb-2 text-md">Adresse mail</label>
-                </div>
         <div className="mb-4">
+          <label htmlFor="email" className="block text-left mb-2 text-md">
+            Adresse mail
+          </label>
           <input 
             type="email" 
             value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} 
             placeholder="ex. toto.dupond@gmail.com"
             className="w-full p-2.5 rounded border border-gray-300 text-black bg-white"
             required 
           />
         </div>
 
-        <div className="relative right-20">
-                <label htmlFor="password" className="mb-2 text-md">Mot de passe</label>
-                </div>
+
         <div className="mb-4">
+          <label htmlFor="password" className="block text-left mb-2 text-md">
+            Mot de passe
+          </label>
           <input 
             type="password" 
             value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            placeholder="Mot de passe" 
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} 
+            placeholder="********"
             className="w-full p-2.5 rounded border border-gray-300 text-black bg-white"
             required 
           />
         </div>
 
-        <div className="relative right-8">
-                <label htmlFor="Confirm password" className="mb-2 text-md">Confirmation mot de passe</label>
-                </div>
-        <div className="mb-4">
+        <div className="mb-6">
+          <label htmlFor="confirm-password" className="block text-left mb-2 text-md">
+            Confirmation mot de passe
+          </label>
           <input 
             type="password" 
             value={confirmPassword} 
-            onChange={(e) => setConfirmPassword(e.target.value)} 
-            placeholder="Confirmation mot de passe" 
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)} 
+            placeholder="********"
             className="w-full p-2.5 rounded border border-gray-300 text-black bg-white"
             required 
           />
         </div>
 
-        <div className="mb-6 flex items-center">
-          <input type="checkbox" id="terms" required className="mr-2" />
-          <label htmlFor="terms" className="text-sm">
-            J'accepte les conditions générales d'utilisation
-          </label>
-        </div>
-
-        <button className="w-full p-2.5 bg-[#007bff] rounded text-white text-lg mb-4 cursor-pointer">
-          Créer mon compte
+        <button
+          type="submit"
+          className="w-full p-2.5 bg-[#f8c700] rounded text-black text-lg mb-4 cursor-pointer"
+        >
+          Récupérer mon compte
         </button>
 
         <div className="relative w-full h-1 bg-[#f8c700] mb-6">
@@ -100,7 +90,11 @@ export const ResetPage: React.FC = () => {
         <div className="text-center">
           <h3 className="text-lg mb-4">SE CONNECTER</h3>
           <p className="text-sm mb-2">Vous avez déjà un compte ?</p>
-          <button onClick={() => navigate("/login")} className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg cursor-pointer">
+          <button
+            type="button"
+            onClick={() => navigate("/login")}
+            className="w-full p-2.5 bg-[#007bff] rounded text-white text-lg cursor-pointer"
+          >
             Connectez-vous
           </button>
         </div>
@@ -113,12 +107,7 @@ export const ResetPage: React.FC = () => {
 
 // Fonction factice pour simuler une requête HTTP
 async function fakeHttpPost(url: string, data: any) {
-  return new Promise<{ data: { token: string; _id: string } }>((resolve) =>
-    setTimeout(() => resolve({ data: { token: "fakeToken", _id: "fakeId" } }), 1000)
+  return new Promise<{ data: { success: boolean } }>((resolve) =>
+    setTimeout(() => resolve({ data: { success: true } }), 1000)
   );
-}
-
-// Fonction factice de connexion
-function login(token: string, userId: string) {
-  console.log("User logged in with token:", token, "and ID:", userId);
 }
