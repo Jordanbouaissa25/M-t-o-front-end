@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiAlignJustify } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
 import { IoLogIn } from "react-icons/io5";
@@ -6,7 +6,9 @@ import { IoMdHome } from "react-icons/io";
 import { IoIosSettings } from "react-icons/io";
 import { NavLink } from 'react-router-dom';
 
+
 export const SearchPage = () => {
+  const [search, setSearch] = useState("")
   return (
     <div className="flex flex-col min-h-screen justify-between bg-[#2D2C5A] text-white">
       <header className="flex justify-between items-center p-5 bg-[#2D2C5A]">

@@ -83,6 +83,7 @@ export const LoginPage: React.FC = () => {
             <label className="text-sm">
               <input type="checkbox" className="mr-2"/> Se souvenir de moi
             </label>
+            <NavLink to="/reset" className="text-[#FFFFFF]">Mot de passe oublié ?</NavLink>
           </div>
 
           <button type="submit" className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg mb-3 cursor-pointer">
@@ -94,7 +95,6 @@ export const LoginPage: React.FC = () => {
            </div>
           
           <div className="flex justify-between mb-3 text-sm">
-            <NavLink to="/reset" className="text-[#FFFFFF]">Mot de passe oublié ?</NavLink>
             <button onClick={() => navigate("/register")} className="w-full p-2.5 bg-[#007bff] mt-0 rounded text-[#000000] text-lg cursor-pointer">
             Créer mon compte
           </button>
