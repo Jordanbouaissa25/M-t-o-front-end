@@ -23,7 +23,7 @@ export const LoginPage: React.FC = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     try {
-      const response = await fakeHttpPost("/login", { email, password });
+      const response = await fakeHttpPost("/", { email, password });
       const { token, _id } = response.data;
       if (token && _id) {
         login(token, _id);

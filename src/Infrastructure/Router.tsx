@@ -5,15 +5,17 @@ import { SearchPage } from '../Application/Pages/SearchPage';
 import { RegisterPage } from '../Application/Pages/RegisterPage'
 import { SettingsPage } from '../Application/Pages/Settings';
 import { ResetPage } from '../Application/Pages/ResetPage'
+import App from '../Module/App';
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <SearchPage />,
+    element: <LoginPage />,
+    index: true
   },
   {
-    path: "/login",
-    element: <LoginPage />,
+    path: "/search",
+    element: <SearchPage />,
   },
   {
     path: "/register",
@@ -26,6 +28,9 @@ export const router = createBrowserRouter([
   {
   path: "/reset",
   element: <ResetPage />
+  },
+  {
+    path: "/weather",
+    element: < App/>
   }
-
 ]);
