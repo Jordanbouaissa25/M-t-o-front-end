@@ -20,7 +20,7 @@ export const ResetPage: React.FC = () => {
       const { success } = response.data;
       if (success) {
         console.log("Mot de passe réinitialisé avec succès");
-        navigate("/login"); // Rediriger l'utilisateur après une réinitialisation réussie
+        navigate("/"); // Rediriger l'utilisateur après une réinitialisation réussie
       }
     } catch (error: unknown) {
       console.error("Erreur de réinitialisation:", error);
@@ -92,7 +92,7 @@ export const ResetPage: React.FC = () => {
           <p className="text-sm mb-2">Vous avez déjà un compte ?</p>
           <button
             type="button"
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/")}
             className="w-full p-2.5 bg-[#007bff] rounded text-white text-lg cursor-pointer"
           >
             Connectez-vous

@@ -1,11 +1,12 @@
-import React, { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 
 export const App = (): JSX.Element => {
   const [term, setTerm] = useState<string>('');
 
   const getSearchOptions = (value: string) => {
-    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${value.trim}&limit=5&appid=${process.env.REACT_VITE_APP_ID}`).then(res => res.json ())
-    .then((data) => console.log({ data}))
+    fetch(`http://api.openweathermap.org/data/2.5/direct?q=${term}&limit=5&appid=${process.env.REACT_VITE_APP_ID}`)
+    .then((res) => res.json())
+    .then((data) => console.log({data}))
   }
 
   // Gestionnaire pour le changement de texte dans l'input
@@ -13,7 +14,7 @@ export const App = (): JSX.Element => {
     const value = e.target.value.trim()
     setTerm(value);
 
-    if (value == '') return 
+    if (value === '') return 
     getSearchOptions(value)
   };
 

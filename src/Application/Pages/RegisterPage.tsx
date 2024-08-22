@@ -27,7 +27,7 @@ export const RegisterPage: React.FC = () => {
         console.log("token", token);
         console.log("UserId", _id);
 
-        navigate("/login"); // Rediriger l'utilisateur après une inscription réussie
+        navigate("/"); // Rediriger l'utilisateur après une inscription réussie
       }
     } catch (error: unknown) {
       console.error("Erreur d'inscription:", error);
@@ -100,7 +100,7 @@ export const RegisterPage: React.FC = () => {
         <div className="text-center">
           <h3 className="text-lg mb-4">SE CONNECTER</h3>
           <p className="text-sm mb-2">Vous avez déjà un compte ?</p>
-          <button onClick={() => navigate("/login")} className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg cursor-pointer">
+          <button onClick={() => navigate("/")} className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg cursor-pointer">
             Connectez-vous
           </button>
         </div>

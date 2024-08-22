@@ -117,7 +117,7 @@ export const LoginPage: React.FC = () => {
             <NavLink to="/reset" className="text-[#FFFFFF] ml-4">Mot de passe oublié ?</NavLink>
           </div>
 
-          <button type="submit" className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg mb-3 cursor-pointer">
+          <button onClick={() => navigate("/weather")} type="submit" className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg mb-3 cursor-pointer">
             Connectez-vous
           </button>
 

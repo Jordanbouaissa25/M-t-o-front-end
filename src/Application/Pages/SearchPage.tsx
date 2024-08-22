@@ -42,7 +42,7 @@ export const SearchPage = () => {
 
       {/* Footer */}
       <footer className="bg-[#4E94CE] p-4 flex justify-around">
-        <NavLink to="/login" className="flex flex-col items-center text-black">
+        <NavLink to="/" className="flex flex-col items-center text-black">
           <IoLogIn size={24} />
           <span className="mt-1">Logout</span>
         </NavLink>
