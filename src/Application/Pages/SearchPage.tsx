@@ -35,12 +35,7 @@ export const SearchPage: React.FC = () => {
 
   const fetchWeatherData = async () => {
     try {
-      const response = await http.post('/weather', {
-        city: search,
-        appid: API_KEY,
-        units: 'metric',
-        lang: 'fr',
-      });
+      const response = await http.post('/weather');
       setWeatherData(response.data);
       setError(null);
     } catch (err) {

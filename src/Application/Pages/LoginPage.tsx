@@ -22,6 +22,18 @@ export const LoginPage: React.FC = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
+
+    // Validation de l'email et du mot de passe
+    if (!email.includes("@")) {
+      setError("Veuillez entrer une adresse e-mail valide.");
+      return;
+    }
+
+    if (password.length < 1) {
+      setError("Veuillez entrer un mot de passe.");
+      return;
+    }
+
     try {
       const response = await fakeHttpPost("/", { email, password });
       const { token, _id } = response.data;
@@ -42,7 +54,7 @@ export const LoginPage: React.FC = () => {
         console.log("token", token);
         console.log("UserId", _id);
 
-        navigate("/"); // Rediriger l'utilisateur après une connexion réussie
+        navigate("/search"); // Rediriger l'utilisateur après une connexion réussie
       }
     } catch (error: unknown) {
       console.error("Erreur de connexion:", error);
@@ -77,6 +89,13 @@ export const LoginPage: React.FC = () => {
       <div className="flex flex-col items-center justify-center w-full">
         <form onSubmit={handleSubmit} className="bg-[#2d3658] p-5 rounded-lg shadow-md w-[300px] text-center">
           <h2 className="mb-5 text-2xl">Se connecter</h2>
+          
+          {error && (
+            <div className="text-red-500 mb-4">
+              {error}
+            </div>
+          )}
+
           <div className="relative right-20">
             <label htmlFor="mail" className="mb-2 text-md">Adresse mail</label>
           </div>
@@ -117,7 +136,7 @@ export const LoginPage: React.FC = () => {
             <NavLink to="/reset" className="text-[#FFFFFF] ml-4">Mot de passe oublié ?</NavLink>
           </div>
 
-          <button onClick={() => navigate("/search")} type="submit" className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg mb-3 cursor-pointer">
+          <button type="submit" className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg mb-3 cursor-pointer">
             Connectez-vous
           </button>
 
