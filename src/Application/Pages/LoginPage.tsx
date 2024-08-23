@@ -8,7 +8,6 @@ export const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // Charger les valeurs stockées dans localStorage lors du montage du composant
   useEffect(() => {
     const savedEmail = localStorage.getItem("email");
     const savedPassword = localStorage.getItem("password");
@@ -23,41 +22,35 @@ export const LoginPage: React.FC = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
 
-    // Validation de l'email et du mot de passe
-    if (!email.includes("@")) {
-      setError("Veuillez entrer une adresse e-mail valide.");
-      return;
-    }
+    // Récupérer la liste des utilisateurs inscrits
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
 
-    if (password.length < 1) {
-      setError("Veuillez entrer un mot de passe.");
-      return;
-    }
+    // Rechercher un utilisateur correspondant
+    const user = users.find((user: any) => user.email === email && user.password === password);
 
-    try {
-      const response = await fakeHttpPost("/", { email, password });
-      const { token, _id } = response.data;
-      if (token && _id) {
-        login(token, _id);
-        localStorage.setItem("token", token);
-        localStorage.setItem("userId", _id);
+    if (user) {
+      // Connexion réussie
+      const token = "fakeToken"; // Générez un token de manière sécurisée dans une vraie application
+      const _id = "fakeId"; // Générez un identifiant de manière sécurisée dans une vraie application
 
-        if (rememberMe) {
-          localStorage.setItem("email", email);
-          localStorage.setItem("password", password);
-        } else {
-          localStorage.removeItem("email");
-          localStorage.removeItem("password");
-        }
+      login(token, _id);
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", _id);
 
-        console.log("Connexion réussie");
-        console.log("token", token);
-        console.log("UserId", _id);
-
-        navigate("/search"); // Rediriger l'utilisateur après une connexion réussie
+      if (rememberMe) {
+        localStorage.setItem("email", email);
+        localStorage.setItem("password", password);
+      } else {
+        localStorage.removeItem("email");
+        localStorage.removeItem("password");
       }
-    } catch (error: unknown) {
-      console.error("Erreur de connexion:", error);
+
+      console.log("Connexion réussie");
+      console.log("token", token);
+      console.log("UserId", _id);
+
+      navigate("/search"); // Rediriger l'utilisateur après une connexion réussie
+    } else {
       setError("Identifiant ou mot de passe incorrect. Veuillez réessayer.");
     }
   };
@@ -81,8 +74,8 @@ export const LoginPage: React.FC = () => {
           {/* Logo container */}
         </div>
         <div className="flex">
-          <i className="search-icon text-xl ml-2.5"></i> {/* Remplacez avec une implémentation d'icône */}
-          <i className="menu-icon text-xl ml-2.5"></i> {/* Remplacez avec une implémentation d'icône */}
+          <i className="search-icon text-xl ml-2.5"></i>
+          <i className="menu-icon text-xl ml-2.5"></i>
         </div>
       </header>
       
@@ -90,11 +83,7 @@ export const LoginPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="bg-[#2d3658] p-5 rounded-lg shadow-md w-[300px] text-center">
           <h2 className="mb-5 text-2xl">Se connecter</h2>
           
-          {error && (
-            <div className="text-red-500 mb-4">
-              {error}
-            </div>
-          )}
+          {error && <div className="text-red-500 mb-4">{error}</div>}
 
           <div className="relative right-20">
             <label htmlFor="mail" className="mb-2 text-md">Adresse mail</label>
@@ -133,7 +122,7 @@ export const LoginPage: React.FC = () => {
               /> 
               Se souvenir de moi
             </label>
-            <NavLink to="/reset" className="text-[#FFFFFF] ml-4">Mot de passe oublié ?</NavLink>
+            <NavLink to="/reset" className="text-[#007bff] ml-4">Mot de passe oublié ?</NavLink>
           </div>
 
           <button type="submit" className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg mb-3 cursor-pointer">
@@ -154,13 +143,6 @@ export const LoginPage: React.FC = () => {
     </div>
   );
 };
-
-// Fonction factice pour simuler une requête HTTP
-async function fakeHttpPost(url: string, data: any) {
-  return new Promise<{ data: { token: string; _id: string } }>((resolve) =>
-    setTimeout(() => resolve({ data: { token: "fakeToken", _id: "fakeId" } }), 1000)
-  );
-}
 
 // Fonction factice de connexion
 function login(token: string, userId: string) {

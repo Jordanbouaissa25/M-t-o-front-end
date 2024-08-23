@@ -1,4 +1,5 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+// RegisterPage.tsx
+import React, { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const RegisterPage: React.FC = () => {
@@ -15,34 +16,37 @@ export const RegisterPage: React.FC = () => {
       return;
     }
 
-    try {
-      const response = await fakeHttpPost("/register", { email, password });
-      const { token, _id } = response.data;
-      if (token && _id) {
-        login(token, _id);
-        localStorage.setItem("token", token);
-        localStorage.setItem("userId", _id);
+    // Récupérer la liste des utilisateurs stockés
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
 
-        console.log("Inscription réussie");
-        console.log("token", token);
-        console.log("UserId", _id);
-
-        navigate("/"); // Rediriger l'utilisateur après une inscription réussie
-      }
-    } catch (error: unknown) {
-      console.error("Erreur d'inscription:", error);
-      setError("Erreur lors de l'inscription. Veuillez réessayer.");
+    // Vérifier si l'utilisateur existe déjà
+    if (users.some((user: any) => user.email === email)) {
+      setError("Cet email est déjà utilisé.");
+      return;
     }
+
+    // Ajouter le nouvel utilisateur à la liste
+    const newUser = { email, password };
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));
+
+    // Simuler une inscription réussie
+    const response = await fakeHttpPost("/register", { email, password });
+    const { token, _id } = response.data;
+
+    // Simuler la connexion après inscription
+    login(token, _id);
+    localStorage.setItem("token", token);
+    localStorage.setItem("userId", _id);
+
+    navigate("/"); // Rediriger l'utilisateur après une inscription réussie
   };
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-[#1c2448] text-white p-4">
       <form onSubmit={handleSubmit} className="bg-[#2d3658] p-6 rounded-lg shadow-md w-[300px] text-center">
         <h2 className="mb-6 text-2xl font-semibold">S'inscrire</h2>
-
-        <div className="relative right-20">
-                <label htmlFor="mail" className="mb-2 text-md">Adresse mail</label>
-                </div>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="mb-4">
           <input 
             type="email" 
@@ -53,10 +57,6 @@ export const RegisterPage: React.FC = () => {
             required 
           />
         </div>
-
-        <div className="relative right-20">
-                <label htmlFor="password" className="mb-2 text-md">Mot de passe</label>
-                </div>
         <div className="mb-4">
           <input 
             type="password" 
@@ -67,10 +67,6 @@ export const RegisterPage: React.FC = () => {
             required 
           />
         </div>
-
-        <div className="relative right-8">
-                <label htmlFor="Confirm password" className="mb-2 text-md">Confirmation mot de passe</label>
-                </div>
         <div className="mb-4">
           <input 
             type="password" 
@@ -81,31 +77,21 @@ export const RegisterPage: React.FC = () => {
             required 
           />
         </div>
-
         <div className="mb-6 flex items-center">
           <input type="checkbox" id="terms" required className="mr-2" />
           <label htmlFor="terms" className="text-sm">
             J'accepte les conditions générales d'utilisation
           </label>
         </div>
-
-        <button className="w-full p-2.5 bg-[#007bff] rounded text-white text-lg mb-4 cursor-pointer">
+        <button type="submit" className="w-full p-2.5 bg-[#007bff] rounded text-white text-lg mb-4 cursor-pointer">
           Créer mon compte
         </button>
-
-        <div className="relative w-full h-1 bg-[#f8c700] mb-6">
-          <div className="absolute left-0 h-1 bg-[#007bff]" style={{ width: '50%' }}></div>
-        </div>
-
         <div className="text-center">
-          <h3 className="text-lg mb-4">SE CONNECTER</h3>
           <p className="text-sm mb-2">Vous avez déjà un compte ?</p>
           <button onClick={() => navigate("/")} className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg cursor-pointer">
             Connectez-vous
           </button>
         </div>
-
-        {error && <p className="text-red-500 mt-4">{error}</p>}
       </form>
     </div>
   );
