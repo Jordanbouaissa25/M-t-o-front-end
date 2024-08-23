@@ -1,11 +1,9 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { FiAlignJustify } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
-import { IoLogIn } from "react-icons/io5";
-import { IoMdHome } from "react-icons/io";
-import { IoIosSettings } from "react-icons/io";
 import { NavLink } from 'react-router-dom';
 import {useNavigate } from "react-router-dom";
+import {Footer} from "../../Components/footer"
 
 export const SettingsPage: React.FC = () => {
   const [windUnit, setWindUnit] = useState<string>("Km/h");
@@ -144,20 +142,7 @@ export const SettingsPage: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#4E94CE] p-4 flex justify-around">
-        <NavLink to="/" className="flex flex-col items-center text-black">
-          <IoLogIn size={24} />
-          <span className="mt-1">Logout</span>
-        </NavLink>
-        <NavLink to="/" className="flex flex-col items-center text-black">
-          <IoMdHome size={24} />
-          <span className="mt-1">Home</span>
-        </NavLink>
-        <NavLink to="/Settings" className="flex flex-col items-center text-black">
-          <IoIosSettings size={24} />
-          <span className="mt-1">Settings</span>
-        </NavLink>
-      </footer>
+      <Footer />
     </div>
   );
 };

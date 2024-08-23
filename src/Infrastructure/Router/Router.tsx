@@ -7,6 +7,7 @@ import { SettingsPage } from '../../Application/Pages/Settings';
 import { ResetPage } from '../../Application/Pages/ResetPage'
 import App from '../../Module/App';
 
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -29,8 +30,4 @@ export const router = createBrowserRouter([
   path: "/reset",
   element: <ResetPage />
   },
-  {
-    path: "/weather",
-    element: < App/>
-  }
 ]);

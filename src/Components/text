@@ -1,0 +1,75 @@
+return (
+    <div className="flex flex-col min-h-screen justify-between bg-[#2D2C5A] text-white">
+        <header className="flex justify-between items-center p-5 bg-[#2D2C5A]">
+            <div className="flex items-center">
+                <img src="../../public/logo.png" alt="Logo météo" className="h-10" />
+                <p className='ml-4 text-white'>Météo</p>
+            </div>
+            <NavLink to="/Menu" className="text-[#FEBF2C]">
+                <FiAlignJustify size={24} />
+            </NavLink>
+            {/* <div className="text-white">
+          <FaSearch size={24} />
+        </div> */}
+        </header>
+
+        {/* Barre de recherche */}
+        <div className="px-5 mt-1 flex flex-col">
+            <label htmlFor="search" className="mb-2 text-lg">Rechercher</label>
+            <div className="relative">
+                <input
+                    type="text"
+                    id="search"
+                    className="p-3 pl-5 pr-10 rounded-full w-full text-black"
+                    placeholder="Rechercher une ville, un pays..."
+                />
+                <span className="absolute right-3 top-3 text-black">
+                    <FaSearch size={20} />
+                </span>
+            </div>
+        </div>
+        <div className="flex flex-col items-center text-white p-6 rounded-lg space-y-4">
+            {/* Icône du soleil */}
+            <img src={clear_icon} alt="" className="" />
+
+            {/* Température */}
+            <p className="text-4xl font-bold">16°C</p>
+
+            {/* Ville */}
+            <p className="text-xl">London</p>
+
+            {/* Heure du lever de soleil */}
+            <div className="flex items-center space-x-2">
+                <FiSunrise className="w-6 h-6" />
+                <p className="text-lg">8:16</p>
+            </div>
+            <div className="flex items-center space-x-2">
+                <FiSunset className='w-6 h-6' />
+                <p className='text-lg'>17h20</p>
+            </div>
+            <div className='flex items-center space-x-2'>
+                <MdOutlineVisibility className='w-6 h-6' />
+                <p className='text-lg'>20 km</p>
+            </div>
+            {/* Humidité */}
+            <div className="flex items-center space-x-2">
+                <img src={humidity_icon} alt="IconHumidity" className="w-6 h-6" />
+                <div className="flex flex-col items-start">
+                    <p className="text-lg">91%</p>
+                </div>
+            </div>
+
+            {/* Vitesse du vent */}
+            <div className="flex items-center space-x-2">
+                <img src={wind_icon} alt="IconWind" className="w-6 h-6" />
+                <div className="flex flex-col items-start">
+                    <p className="text-lg">3.6 km/h</p>
+                </div>
+            </div>
+        </div>
+
+
+        {/* Footer */}
+        <Footer />
+    </div>
+);
