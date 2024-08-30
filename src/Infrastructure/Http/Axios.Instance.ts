@@ -5,6 +5,6 @@ const token :string|null = localStorage.getItem("token")
 export const http = axios.create({
   baseURL: 'http://localhost:3001', // Assurez-vous que cela correspond à l'URL de votre backend
   headers: {
-    'Authorization': `bearer${token && token}`
+    'Authorization': `Bearer ${token && token}`
   },
 });

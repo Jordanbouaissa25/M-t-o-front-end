@@ -1,36 +1,36 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { http } from "../../Infrastructure/Http/Axios.Instance";
 
 export const ResetPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
-    event.preventDefault();
-    if (password !== confirmPassword) {
-      setError("Les mots de passe ne correspondent pas.");
-      return;
-    }
+async function reinitialisation(email: string, newPassword: string) {
+  try {
+    const response = await http.put("/userResPassword", { email, newPassword });
 
-    try {
-      const response = await fakeHttpPost("/user", { email, password });
-      const { success } = response.data;
-      if (success) {
-        console.log("Mot de passe réinitialisé avec succès");
-        navigate("/"); // Rediriger l'utilisateur après une réinitialisation réussie
-      }
-    } catch (error: unknown) {
-      console.error("Erreur de réinitialisation:", error);
-      setError("Erreur lors de la réinitialisation. Veuillez réessayer.");
+    if (response.status === 200) {  // Modifier pour vérifier un statut 200
+      console.log("Réinitialisation réussie");
+      // Si nécessaire, traiter les données de la réponse ici
+      navigate("/"); // Rediriger l'utilisateur après une réinitialisation réussie
+    } else {
+      console.log("Impossible de réinitialiser le mot de passe");
     }
-  };
+  } catch (error) {
+    console.error("Erreur lors de la réinitialisation du mot de passe:", error);
+    // Gérer l'affichage d'une erreur à l'utilisateur ici si nécessaire
+  }
+}
+
+   
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-[#1c2448] text-white p-4">
-      <form onSubmit={handleSubmit} className="bg-[#2d3658] p-6 rounded-lg shadow-md w-[300px] text-center">
+      <form onSubmit={(e)=>{e.preventDefault();reinitialisation(email, password)}} className="bg-[#2d3658] p-6 rounded-lg shadow-md w-[300px] text-center">
         <h2 className="mb-6 text-2xl font-semibold">Réinitialisation mot de passe</h2>
 
         <div className="mb-4">
@@ -47,10 +47,9 @@ export const ResetPage: React.FC = () => {
           />
         </div>
 
-
         <div className="mb-4">
           <label htmlFor="password" className="block text-left mb-2 text-md">
-            Mot de passe
+           Nouveau mot de passe
           </label>
           <input 
             type="password" 
@@ -64,7 +63,7 @@ export const ResetPage: React.FC = () => {
 
         <div className="mb-6">
           <label htmlFor="confirm-password" className="block text-left mb-2 text-md">
-            Confirmation mot de passe
+            Confirmation nouveau mot de passe
           </label>
           <input 
             type="password" 
@@ -104,10 +103,3 @@ export const ResetPage: React.FC = () => {
     </div>
   );
 };
-
-// Fonction factice pour simuler une requête HTTP
-async function fakeHttpPost(url: string, data: any) {
-  return new Promise<{ data: { success: boolean } }>((resolve) =>
-    setTimeout(() => resolve({ data: { success: true } }), 1000)
-  );
-}

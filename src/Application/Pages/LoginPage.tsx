@@ -1,5 +1,6 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { http } from "../../Infrastructure/Http/Axios.Instance";
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -19,52 +20,38 @@ export const LoginPage: React.FC = () => {
     }
   }, []);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
-    event.preventDefault();
 
-    // Récupérer la liste des utilisateurs inscrits
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-
-    // Rechercher un utilisateur correspondant
-    const user = users.find((user: any) => user.email === email && user.password === password);
-
-    if (user) {
-      // Connexion réussie
-      const token = "fakeToken"; // Générez un token de manière sécurisée dans une vraie application
-      const _id = "fakeId"; // Générez un identifiant de manière sécurisée dans une vraie application
-
-      login(token, _id);
+async function connexion(username: string, password: string) {
+  try {
+    const response = await http.post("/login", { username, password });
+    
+    if (response.status === 200) {  // Utiliser un statut 200 pour succès
+      console.log("Connexion réussie");
+      const token = response.data.token;
+      const _id = response.data._id;
+      
       localStorage.setItem("token", token);
       localStorage.setItem("userId", _id);
-
-      if (rememberMe) {
-        localStorage.setItem("email", email);
-        localStorage.setItem("password", password);
-      } else {
-        localStorage.removeItem("email");
-        localStorage.removeItem("password");
-      }
-
-      console.log("Connexion réussie");
-      console.log("token", token);
-      console.log("UserId", _id);
-
       navigate("/search"); // Rediriger l'utilisateur après une connexion réussie
     } else {
-      setError("Identifiant ou mot de passe incorrect. Veuillez réessayer.");
     }
-  };
+  } catch (error) {
+    setError("Addresse mail ou mot de passe incorrecte")
+    console.error("Erreur lors de la connexion:", error);
+    // Afficher un message d'erreur à l'utilisateur si nécessaire
+  }
+}
 
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setEmail(event.target.value);
+    setEmail(event.currentTarget.value);
   };
 
   const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setPassword(event.target.value);
+    setPassword(event.currentTarget.value);
   };
 
   const handleRememberMeChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setRememberMe(event.target.checked);
+    setRememberMe(event.currentTarget.checked);
   };
 
   return (
@@ -80,10 +67,10 @@ export const LoginPage: React.FC = () => {
       </header>
       
       <div className="flex flex-col items-center justify-center w-full">
-        <form onSubmit={handleSubmit} className="bg-[#2d3658] p-5 rounded-lg shadow-md w-[300px] text-center">
+        <form onSubmit={(e)=>{e.preventDefault();connexion(email, password)}} className="bg-[#2d3658] p-5 rounded-lg shadow-md w-[300px] text-center">
           <h2 className="mb-5 text-2xl">Se connecter</h2>
           
-          {error && <div className="text-red-500 mb-4">{error}</div>}
+          <p className="text-red-500 mb-4">{error}</p>
 
           <div className="relative right-20">
             <label htmlFor="mail" className="mb-2 text-md">Adresse mail</label>
@@ -128,11 +115,9 @@ export const LoginPage: React.FC = () => {
           <button type="submit" className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg mb-3 cursor-pointer">
             Connectez-vous
           </button>
-
           <div className="relative w-full h-1 bg-[#007bff] mb-6">
             <div className="absolute left-0 h-1 bg-[#f8c700]" style={{ width: '50%' }}></div>
           </div>
-          
           <div className="flex justify-between mb-3 text-sm">
             <button onClick={() => navigate("/register")} className="w-full p-2.5 bg-[#007bff] mt-0 rounded text-[#000000] text-lg cursor-pointer">
               Créer mon compte
@@ -143,8 +128,3 @@ export const LoginPage: React.FC = () => {
     </div>
   );
 };
-
-// Fonction factice de connexion
-function login(token: string, userId: string) {
-  console.log("User logged in with token:", token, "and ID:", userId);
-}

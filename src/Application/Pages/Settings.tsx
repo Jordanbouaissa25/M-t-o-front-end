@@ -1,60 +1,106 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import { FiAlignJustify } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import {useNavigate } from "react-router-dom";
 import {Footer} from "../../Components/footer"
+import { http } from "../../Infrastructure/Http/Axios.Instance";
 
 export const SettingsPage: React.FC = () => {
-  const [windUnit, setWindUnit] = useState<string>("Km/h");
-  const [tempUnit, setTempUnit] = useState<string>("°C");
-  const [newEmail, setNewEmail] = useState<string>("");
-  const [newPassword, setNewPassword] = useState<string>("");
+  const [windUnit, setWindUnit] = useState<string>("");
+  const [tempUnit, setTempUnit] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [settingID, setSettingId] = useState<string>("")
+  const navigate = useNavigate();
 
-  const handleWindUnitChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setWindUnit(event.target.value);
-  };
-
-  const handleTempUnitChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setTempUnit(event.target.value);
-  };
-
-  const handleEmailChange = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      const response = await fakeHttpPost("/setting", { email: newEmail });
-      const { success } = response.data;
-      if (success) {
-        console.log("Email modifié avec succès");
+   // Fonction pour récupérer les paramètres
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const user_id = localStorage.getItem("userId");
+      if (!user_id) {
+        setError("Utilisateur non authentifié.");
+        setLoading(false);
+        navigate("/setting");
+        return;
       }
-    } catch (error: unknown) {
-      console.error("Erreur de modification d'email:", error);
-      setError("Erreur lors de la modification de l'email. Veuillez réessayer.");
+
+      try {
+        const response = await http.get(`/setting/${user_id}`);
+        if (response.status === 200) {
+          const tempUnitFromServer = response.data.setting_temperature;
+          const windUnitFromServer = response.data.setting_wind
+          setSettingId(response.data._id)
+          setWindUnit(windUnitFromServer);
+          setTempUnit(tempUnitFromServer);
+        } else {
+          setError("Erreur lors de la récupération des paramètres.");
+        }
+      } catch (err) {
+        console.error("Erreur lors de la requête GET pour les paramètres:", err);
+        setError("Impossible de récupérer les paramètres.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, [navigate]);
+
+  const handleWindUnitChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+     try {
+       const response = await http.put(`/setting/${settingID}`, { setting_wind : event.target.value });
+
+    if (response.status === 200) {  // Modifier pour vérifier un statut 200
+      console.log("Modification de l'unité réussie");
+      // Si nécessaire, traiter les données de la réponse ici
+      //navigate("/"); // Rediriger l'utilisateur après une réinitialisation réussie
+    } else {
+      console.log("Impossible de modifier l'unité");
     }
+  } catch (error) {
+    console.error("Erreur lors de la modification de l'unité:", error);
+    // Gérer l'affichage d'une erreur à l'utilisateur ici si nécessaire
+  }
   };
 
-  const handlePasswordChange = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const  handleTempUnitChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     try {
-      const response = await fakeHttpPost("/setting", { password: newPassword });
-      const { success } = response.data;
-      if (success) {
-        console.log("Mot de passe modifié avec succès");
-      }
-    } catch (error: unknown) {
-      console.error("Erreur de modification du mot de passe:", error);
-      setError("Erreur lors de la modification du mot de passe. Veuillez réessayer.");
+    const response = await http.put(`/setting/${settingID}`, { setting_temperature : event.target.value });
+    if (response.status === 200) {  // Modifier pour vérifier un statut 200
+      console.log("Modification de la température réussie");
+      // Si nécessaire, traiter les données de la réponse ici
+      //navigate("/"); // Rediriger l'utilisateur après une réinitialisation réussie
+    } else {
+      console.log("Impossible de modifier la température");
     }
+  } catch (error) {
+    console.error("Erreur lors de la modification de la température:", error);
+    // Gérer l'affichage d'une erreur à l'utilisateur ici si nécessaire
+  }
   };
+
+async function reinitialisation(email: string) {
+  try {
+    const response = await http.put("/user", { email });
+
+    if (response.status === 200) {  // Modifier pour vérifier un statut 200
+      console.log("Réinitialisation réussie");
+      // Si nécessaire, traiter les données de la réponse ici
+      navigate("/"); // Rediriger l'utilisateur après une réinitialisation réussie
+    } else {
+      console.log("Impossible de réinitialiser le mot de passe");
+    }
+  } catch (error) {
+    console.error("Erreur lors de la réinitialisation du mot de passe:", error);
+    // Gérer l'affichage d'une erreur à l'utilisateur ici si nécessaire
+  }
+}
 
   const handleNewEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setNewEmail(event.target.value);
+    setEmail(event.target.value);
   };
-
-  // const handleNewPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   setNewPassword(event.target.value);
-  // };
 
   return (
     <div className="flex flex-col min-h-screen bg-[#2D2C5A] text-white">
@@ -79,32 +125,30 @@ export const SettingsPage: React.FC = () => {
         <div className="flex items-center space-x-4">
           <label className="text-lg text-white">Vent :</label>
           <select
-            value={windUnit}
             onChange={handleWindUnitChange}
             className="p-2.5 rounded bg-[#4e94ce] text-white"
           >
-            <option value="Km/h">Km/h</option>
-            <option value="mi/h">mi/h</option>
+            <option selected={windUnit==="km/h"} value="km/h">km/h</option>
+            <option selected={windUnit==="mi/h"} value="mi/h">mi/h</option>
           </select>
         </div>
 
         <div className="flex items-center space-x-4">
           <label className="text-lg text-white">Température :</label>
           <select
-            value={tempUnit}
             onChange={handleTempUnitChange}
             className="p-2.5 rounded bg-[#4e94ce] text-white"
           >
-            <option value="°C">°C</option>
-            <option value="°F">°F</option>
+            <option selected={tempUnit==="°C"} value="°C">°C</option>
+            <option selected={tempUnit==="°F"} value="°F">°F</option>
           </select>
         </div>
 
-        <form onSubmit={handleEmailChange} className="mt-4 w-full">
+        <form onSubmit={(e)=>{e.preventDefault();reinitialisation(email)}} className="mt-4 w-full">
           <h3 className="text-lg mb-2 text-white">Modifier adresse mail</h3>
           <input
             type="email"
-            value={newEmail}
+            value={email}
             onChange={handleNewEmailChange}
             placeholder="Nouvelle adresse mail"
             className="w-full p-2.5 rounded border border-gray-300 text-black bg-white mb-4"
@@ -118,7 +162,7 @@ export const SettingsPage: React.FC = () => {
           </button>
         </form>
 
-        <form onSubmit={handlePasswordChange} className="mt-4 w-full">
+        <form className="mt-4 w-full">
           {/* <h3 className="text-lg mb-2 text-white">Modifier mot de passe</h3> */}
           {/* <input
             type="password"
@@ -136,10 +180,12 @@ export const SettingsPage: React.FC = () => {
             Reinitialiser mot de passe
           </button>
           </NavLink>
+          
         </form>
 
         {error && <div className="text-red-500 mt-4">{error}</div>}
       </main>
+      
 
       {/* Footer */}
       <Footer />

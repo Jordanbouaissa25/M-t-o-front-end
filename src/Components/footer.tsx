@@ -16,7 +16,7 @@ export const Footer = () => {
           <IoMdHome size={24} />
           <span className="mt-1">Home</span>
         </NavLink>
-        <NavLink to="/Settings" className="flex flex-col items-center text-black">
+        <NavLink to="/setting" className="flex flex-col items-center text-black">
           <IoIosSettings size={24} />
           <span className="mt-1">Settings</span>
         </NavLink>
