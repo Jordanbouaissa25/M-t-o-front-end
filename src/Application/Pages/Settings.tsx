@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
-import { FiAlignJustify } from "react-icons/fi";
+import { FaTwitter, FaInstagram, FaFacebook } from 'react-icons/fa';
 import { FaSearch } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import {useNavigate } from "react-router-dom";
@@ -104,23 +104,28 @@ async function reinitialisation(email: string) {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#2D2C5A] text-white">
-      {/* Header */}
       <header className="flex justify-between items-center p-5 bg-[#2D2C5A]">
         <div className="flex items-center">
           <img src="../../public/logo.png" alt="Logo météo" className="h-10" />
           <p className='ml-4 text-white'>Météo</p>
         </div>
+        <div className="flex space-x-4">
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+          <FaTwitter className="text-white h-6 w-6 hover:text-blue-400" />
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+          <FaInstagram className="text-white h-6 w-6 hover:text-pink-500" />
+        </a>
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+          <FaFacebook className="text-white h-6 w-6 hover:text-blue-600" />
+        </a>
+      </div>
         <div className="flex items-center space-x-2">
-           <NavLink to='/' className="text-white">
+           <NavLink to='/search' className="text-white">
           <FaSearch size={24} />
-        </NavLink>
-        <NavLink to="/Menu" className="text-[#FEBF2C] ">
-          <FiAlignJustify size={24} />
         </NavLink>
         </div>
       </header>
-
-      {/* Contenu principal */}
       <main className="flex-grow p-8 space-y-6">
         <div className="flex items-center space-x-4">
           <label className="text-lg text-white">Vent :</label>
@@ -192,10 +197,3 @@ async function reinitialisation(email: string) {
     </div>
   );
 };
-
-// Fonction factice pour simuler une requête HTTP
-async function fakeHttpPost(url: string, data: any) {
-  return new Promise<{ data: { success: boolean } }>((resolve) =>
-    setTimeout(() => resolve({ data: { success: true } }), 1000)
-  );
-}

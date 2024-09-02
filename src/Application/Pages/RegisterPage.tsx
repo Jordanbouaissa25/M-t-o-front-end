@@ -9,35 +9,40 @@ export const RegisterPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  async function Password8Characters(password: string) {
-    if (password.length < 8) {
-      setError("Le mot de passe doit contenir au moins 8 caractères.");
-      return false;
-    }
+  // async function Password8Characters(password: string) {
+  //   if (password.length < 8) {
+  //     setError("Le mot de passe doit contenir au moins 8 caractères.");
+  //     return false;
+  //   }
 
-    try {
-      const response = await http.put("/user", { password });
-      console.log(response.data)
-      if (response.status === 200) {
-        console.log("Mot de passe accepté");
-        return true;
-      } else {
-        setError("Mot de passe invalide.");
-        return false;
-      }
-    } catch (error) {
-      console.error("Erreur lors de la validation du mot de passe:", error);
-      setError("Erreur lors de la validation du mot de passe.");
-      return false;
-    }
-  }
+  //   try {
+  //     const response = await http.put("/user", { password });
+  //     console.log(response.data)
+  //     if (response.status === 200) {
+  //       console.log("Mot de passe accepté");
+  //       return true;
+  //     } else {
+  //       setError("Mot de passe invalide.");
+  //       return false;
+  //     }
+  //   } catch (error) {
+  //     console.error("Erreur lors de la validation du mot de passe:", error);
+  //     setError("Erreur lors de la validation du mot de passe.");
+  //     return false;
+  //   }
+  // }
 
-  async function inscription(email: string, password: string) {
-    const isPasswordValid = await Password8Characters(password);
+  async function inscription(email: string, password: string, confirmPassword: string) {
 
-    if (!isPasswordValid) {
-      return;
+    if (password !== confirmPassword) {
+      setError("Les mots de passe ne correspondent pas.");
+      return
     }
+    //const isPasswordValid = await Password8Characters(password);
+
+    // if (!isPasswordValid) {
+    //   return;
+    // }
 
     try {
       const response = await http.post("/register", { email, password });
@@ -54,8 +59,8 @@ export const RegisterPage: React.FC = () => {
         setError("Impossible de s'inscrire.");
       }
     } catch (error) {
-      console.error("Erreur lors de l'inscription:", error);
-      setError("Erreur lors de l'inscription.");
+      console.error("Le mot de passe doit contenir 8 caractères, ou l'adresse-mail est déja existante:", error);
+      setError("Le mot de passe doit contenir 8 caracères, ou l'adresse-mail est déja existante.");
     }
   }
 
@@ -64,7 +69,7 @@ export const RegisterPage: React.FC = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          inscription(email, password);
+          inscription(email, password, confirmPassword);
         }}
         className="bg-[#2d3658] p-6 rounded-lg shadow-md w-[300px] text-center"
       >

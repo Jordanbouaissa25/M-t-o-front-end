@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FiAlignJustify, FiSunrise, FiSunset } from "react-icons/fi";
+import { FiSunrise, FiSunset } from "react-icons/fi";
+import { FaTwitter, FaInstagram, FaFacebook } from 'react-icons/fa';
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineVisibility } from "react-icons/md";
 import { NavLink } from 'react-router-dom';
@@ -8,6 +9,7 @@ import humidity_icon from '../../assets/humidity.png';
 import clear_icon from '../../assets/clear.png';
 import wind_icon from '../../assets/wind.png';
 import { http } from '../../Infrastructure/Http/Axios.Instance';
+import axios from 'axios';
 
 const API_KEY = '91fbde8f0b5ad7adc0d2262673e3bd6c'; // Remplacez par votre propre clé API
 
@@ -33,13 +35,21 @@ export const SearchPage: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchWeatherData = async () => {
+
+  const fetchWeatherData = async (city: string) => {
     try {
-      const response = await http.post('/weather');
-      setWeatherData(response.data);
-      setError(null);
+      const response = await axios.post('/weather', { city });
+      console.log(response.data); // Vérifier la réponse du backend
+
+      if (response.data && response.data.name) {
+        setWeatherData(response.data);
+        setError(null);
+      } else {
+        setError("Ville non trouvée. Veuillez réessayer.");
+      }
     } catch (err) {
-      setError("Ville non trouvée. Veuillez réessayer.");
+      console.error("Erreur lors de l'appel au backend :", err);
+      setError("Erreur de communication avec le serveur. Veuillez réessayer.");
       setWeatherData(null);
     }
   };
@@ -50,20 +60,28 @@ export const SearchPage: React.FC = () => {
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetchWeatherData();
+    fetchWeatherData(search);
   };
 
    return (
     <div className="flex flex-col min-h-screen justify-between bg-[#2D2C5A] text-white">
-      <header className="flex justify-between items-center p-5 bg-[#2D2C5A]">
-        <div className="flex items-center">
-          <img src="../../public/logo.png" alt="Logo météo" className="h-10" />
-          <p className='ml-4 text-white'>Météo</p>
-        </div>
-        <NavLink to="/Menu" className="text-[#FEBF2C]">
-          <FiAlignJustify size={24} />
-        </NavLink>
-      </header>
+         <header className="flex justify-between items-center p-5 bg-[#2D2C5A]">
+      <div className="flex items-center">
+        <img src="../../public/logo.png" alt="Logo météo" className="h-10" />
+        <p className="ml-4 text-white">Météo</p>
+      </div>
+      <div className="flex space-x-4">
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+          <FaTwitter className="text-white h-6 w-6 hover:text-blue-400" />
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+          <FaInstagram className="text-white h-6 w-6 hover:text-pink-500" />
+        </a>
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+          <FaFacebook className="text-white h-6 w-6 hover:text-blue-600" />
+        </a>
+      </div>
+    </header>
 
       {/* Barre de recherche */}
       <div className="px-5 mt-1 flex flex-col">

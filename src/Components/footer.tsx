@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 
 export const Footer = () => {
   return (
-     <footer className="bg-[#4E94CE] p-4 flex justify-around">
+     <footer className="bg-[#f8c700] p-4 flex justify-around">
         <NavLink to="/" className="flex flex-col items-center text-black">
           <IoLogIn size={24} />
           <span className="mt-1">Logout</span>
