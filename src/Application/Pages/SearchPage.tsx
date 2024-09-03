@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FiSunrise, FiSunset } from "react-icons/fi";
 import { FaTwitter, FaInstagram, FaFacebook } from 'react-icons/fa';
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineVisibility } from "react-icons/md";
 import { Footer } from "../../Components/footer";
 import humidity_icon from '../../assets/humidity.png';
-import clear_icon from '../../assets/clear.png';
 import wind_icon from '../../assets/wind.png';
 import { http } from '../../Infrastructure/Http/Axios.Instance';
+import moment from 'moment';
+import 'moment-timezone';
 
 // Définition des types pour les données météo
 interface WeatherData {
   city: string;
-
   temp: number;
   humidity: number;
   sunrise: number;
   sunset: number;
   visibility: number;
   wind: number;
-  description: string,
-  icon: string,
-  country: string,
-  timezone: number
+  description: string;
+  icon: string;
+  country: string;
+  timezone: number;
 }
 
 // Ajouter un interceptor pour inclure le token dans chaque requête
@@ -42,26 +42,26 @@ export const SearchPage: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-   const fetchWeatherData = async (city: string) => {
+  const fetchWeatherData = async (city: string) => {
     try {
-        console.log(`Recherche des données météo pour la ville: ${city}`);
-        const response = await http.post(`/weather?city=${city}`);
-           console.log('Réponse complète de l\'API :', response);
+      console.log(`Recherche des données météo pour la ville: ${city}`);
+      const response = await http.post(`/weather?city=${city}`);
+      console.log('Réponse complète de l\'API :', response);
 
-        if (response.data && response.data.city) {
-            setWeatherData(response.data);
-            setError(null);
-        } else {
-            setError("Ville non trouvée. Veuillez réessayer.");
-        }
+      if (response.data && response.data.city) {
+        setWeatherData(response.data);
+        setError(null);
+      } else {
+        setError("Ville non trouvée. Veuillez réessayer.");
+      }
     } catch (err) {
-        console.error("Erreur lors de l'appel au backend :", err);
-        setError("Erreur de communication avec le serveur. Veuillez réessayer.");
-        setWeatherData(null);
+      console.error("Erreur lors de l'appel au backend :", err);
+      setError("Erreur de communication avec le serveur. Veuillez réessayer.");
+      setWeatherData(null);
     }
-};
+  };
 
-console.log(weatherData)
+  console.log(weatherData)
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -122,17 +122,22 @@ console.log(weatherData)
             <p className="text-4xl font-bold">{weatherData.temp}°C</p>
 
             {/* Ville */}
-            <p className="text-xl">{weatherData.city}</p>
-            <p>{weatherData.country}</p>
+            <p className="text-xl">{weatherData.city}, {weatherData.country}</p>
             {/* Heure du lever de soleil */}
             <div className="flex items-center space-x-2">
               <FiSunrise className="w-6 h-6" />
-              <p className="text-lg">{new Date(weatherData.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+              <p className="text-lg">
+                {moment.unix(weatherData.sunrise).utcOffset(weatherData.timezone / 60).format('HH:mm')}
+              </p>
             </div>
+            {/* Heure du coucher du soleil */}
             <div className="flex items-center space-x-2">
               <FiSunset className='w-6 h-6' />
-              <p className='text-lg'>{new Date(weatherData.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+              <p className='text-lg'>
+                {moment.unix(weatherData.sunset).utcOffset(weatherData.timezone / 60).format('HH:mm')}
+              </p>
             </div>
+            {/* Visibilité */}
             <div className='flex items-center space-x-2'>
               <MdOutlineVisibility className='w-6 h-6' />
               <p className='text-lg'>{(weatherData.visibility / 1000).toFixed(1)} km</p>
