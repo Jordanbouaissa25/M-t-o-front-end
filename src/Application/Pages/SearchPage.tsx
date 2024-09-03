@@ -19,43 +19,34 @@ interface WeatherData {
   sunset: number;
   visibility: number;
   wind: number;
+  description: string,
+  icon: string,
+  country: string,
+  timezone: number
 }
+
+// Ajouter un interceptor pour inclure le token dans chaque requête
+http.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export const SearchPage: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-//   useEffect(() => {
-//   const mockData = {
-//     name: "Paris",
-//     main: {
-//       temp: 15,
-//       humidity: 80
-//     },
-//     sys: {
-//       sunrise: 1600000000,
-//       sunset: 1600040000
-//     },
-//     visibility: 10000,
-//     wind: {
-//       speed: 5
-//     }
-//   };
-
-//   setWeatherData(mockData);
-// }, []);
-
-
-
    const fetchWeatherData = async (city: string) => {
     try {
         console.log(`Recherche des données météo pour la ville: ${city}`);
         const response = await http.post(`/weather?city=${city}`);
-         console.log('Statut de la réponse :', response.status);
-        console.log('Données météo reçues:', response.data);
-
-        console.log('Données météo reçues:', response.data);
+           console.log('Réponse complète de l\'API :', response);
 
         if (response.data && response.data.city) {
             setWeatherData(response.data);
@@ -126,14 +117,13 @@ console.log(weatherData)
         {error && <p className="text-red-500">{error}</p>}
         {weatherData && (
           <>
-            <img src={clear_icon} alt="Icône du temps clair" className="" />
-
+            <img src={`http://openweathermap.org/img/wn/${weatherData.icon}@2x.png`} alt="Icône du temps clair" className="size-44" />
             {/* Température */}
             <p className="text-4xl font-bold">{weatherData.temp}°C</p>
 
             {/* Ville */}
             <p className="text-xl">{weatherData.city}</p>
-
+            <p>{weatherData.country}</p>
             {/* Heure du lever de soleil */}
             <div className="flex items-center space-x-2">
               <FiSunrise className="w-6 h-6" />
