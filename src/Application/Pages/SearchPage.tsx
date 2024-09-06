@@ -9,6 +9,18 @@ import wind_icon from '../../assets/wind.png';
 import { http } from '../../Infrastructure/Http/Axios.Instance';
 import moment from 'moment';
 import 'moment-timezone';
+import clear_icon from '../../assets/clear.png'
+import cloud_icon from '../../assets/cloud.png'
+import drizzle_icon from '../../assets/drizzle.png'
+import snow_icon from '../../assets/snow.png'
+import darkcloud_icon from '../../assets/dark-cloud.png'
+import rain2_icon from '../../assets/rain2.png'
+import storm_icon from '../../assets/storm.png'
+import cloud2_icon from '../../assets/cloud2.png'
+import mist_icon from '../../assets/mist.png'
+import drizzle_night_icon from '../../assets/drizzle_night.png'
+import cloud_night_icon from '../../assets/cloud_night.png'
+import clear_night_icon from '../../assets/clear_night.png'
 
 // Définition des types pour les données météo
 interface WeatherData {
@@ -42,6 +54,27 @@ export const SearchPage: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const allIcons = {
+    "01d": clear_icon,
+    "01n": clear_night_icon,
+    "02d": cloud_icon,
+    "02n": cloud_night_icon,
+    "03d": cloud2_icon,
+    "03n": cloud2_icon,
+    "04d": darkcloud_icon,
+    "04n": darkcloud_icon,
+    "09d": rain2_icon,
+    "09n": rain2_icon,
+    "10d": drizzle_icon,
+    "10n": drizzle_night_icon,
+    "11d": storm_icon,
+    "11n": storm_icon,
+    "13d": snow_icon,
+    "13n": snow_icon,
+    "50d": mist_icon,
+    "50n": mist_icon
+  }
+
   const fetchWeatherData = async (city: string) => {
     try {
       console.log(`Recherche des données météo pour la ville: ${city}`);
@@ -49,11 +82,20 @@ export const SearchPage: React.FC = () => {
       console.log('Réponse complète de l\'API :', response);
 
       if (response.data && response.data.city) {
-        setWeatherData(response.data);
-        setError(null);
-      } else {
-        setError("Ville non trouvée. Veuillez réessayer.");
-      }
+      const iconKey = response.data.icon as keyof typeof allIcons;
+  
+        // Vérifie que l'icône existe dans allIcons
+        if (iconKey in allIcons) {
+        response.data.icon = allIcons[iconKey];
+  } else {
+    response.data.icon = clear_icon; // Utilise une icône par défaut si l'icône est manquante
+  }
+
+  setWeatherData(response.data);
+  setError(null);
+} else {
+  setError("Ville non trouvée. Veuillez réessayer.");
+}
     } catch (err) {
       console.error("Erreur lors de l'appel au backend :", err);
       setError("Erreur de communication avec le serveur. Veuillez réessayer.");
@@ -117,7 +159,7 @@ export const SearchPage: React.FC = () => {
         {error && <p className="text-red-500">{error}</p>}
         {weatherData && (
           <>
-            <img src={`http://openweathermap.org/img/wn/${weatherData.icon}@2x.png`} alt="Icône du temps clair" className="size-44" />
+            <img src={weatherData.icon} alt="Icône du temps clair" className="size-44" />
             {/* Température */}
             <p className="text-4xl font-bold">{weatherData.temp}°C</p>
 
