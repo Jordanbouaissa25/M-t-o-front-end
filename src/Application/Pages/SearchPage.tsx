@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiSunrise, FiSunset } from "react-icons/fi";
 import { FaTwitter, FaInstagram, FaFacebook } from 'react-icons/fa';
 import { FaSearch } from "react-icons/fa";
@@ -54,8 +54,8 @@ export const SearchPage: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  //   const [tempUnit, setTempUnit] = useState<string>('C'); 
-  // const [windUnit, setWindUnit] = useState<string>('km/h'); 
+  const [tempUnit, setTempUnit] = useState<string>('°C'); 
+  const [windUnit, setWindUnit] = useState<string>('km/h'); 
 
   const allIcons = {
     "01d": clear_icon,
@@ -85,20 +85,20 @@ export const SearchPage: React.FC = () => {
       console.log('Réponse complète de l\'API :', response);
 
       if (response.data && response.data.city) {
-      const iconKey = response.data.icon as keyof typeof allIcons;
-  
+        const iconKey = response.data.icon as keyof typeof allIcons;
+
         // Vérifie que l'icône existe dans allIcons
         if (iconKey in allIcons) {
-        response.data.icon = allIcons[iconKey];
-  } else {
-    response.data.icon = clear_icon; // Utilise une icône par défaut si l'icône est manquante
-  }
+          response.data.icon = allIcons[iconKey];
+        } else {
+          response.data.icon = clear_icon; // Utilise une icône par défaut si l'icône est manquante
+        }
 
-  setWeatherData(response.data);
-  setError(null);
-} else {
-  setError("Ville non trouvée. Veuillez réessayer.");
-}
+        setWeatherData(response.data);
+        setError(null);
+      } else {
+        setError("Ville non trouvée. Veuillez réessayer.");
+      }
     } catch (err) {
       console.error("Erreur lors de l'appel au backend :", err);
       setError("Erreur de communication avec le serveur. Veuillez réessayer.");
@@ -108,15 +108,34 @@ export const SearchPage: React.FC = () => {
 
   console.log(weatherData)
 
+  const fetchSettings = async () => {
+    try {
+      const user_id = localStorage.getItem("userId");
+      if (!user_id) return;
+
+      const response = await http.get(`/setting/${user_id}`);
+      if (response.status === 200) {
+        setTempUnit(response.data.setting_temperature);
+        setWindUnit(response.data.setting_wind);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des paramètres :", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
    
-  // const convertTemperature = (temp: number, unit: string) => {
-  //   return unit === 'F' ? (temp * 9) / 5 + 32 : temp;
-  // };
+  const convertTemperature = (temp: number, unit: string) => {
+  const convertedTemp = unit === '°F' ? (temp * 9) / 5 + 32 : temp;
+  return Math.round(convertedTemp);
+};
 
-
-  // const convertWindSpeed = (wind: number, unit: string) => {
-  //   return unit === 'mi/h' ? wind / 1.609 : wind;
-  // };
+  const convertWindSpeed = (wind: number, unit: string) => {
+    const convertedWind = unit === 'mi/h' ? wind / 1.609 : wind;
+    return Math.round(convertedWind);
+  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -128,112 +147,112 @@ export const SearchPage: React.FC = () => {
   };
 
   return (
-  <div className="flex flex-col min-h-screen justify-between bg-[#2D2C5A] text-white">
-    <header className="flex justify-between items-center p-5 bg-[#2D2C5A]">
-      <div className="flex items-center">
-        <img src="../../public/logo.png" alt="Logo météo" className="h-10" />
-        <p className="ml-4 text-white">Météo</p>
-      </div>
-      <div className="flex space-x-4">
-        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-          <FaTwitter className="text-white h-6 w-6 hover:text-blue-400" />
-        </a>
-        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-          <FaInstagram className="text-white h-6 w-6 hover:text-pink-500" />
-        </a>
-        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-          <FaFacebook className="text-white h-6 w-6 hover:text-blue-600" />
-        </a>
-      </div>
-    </header>
-
-    {/* Barre de recherche */}
-    <div className="px-5 mt-1 flex flex-col">
-      <form onSubmit={handleSearchSubmit}>
-        <label htmlFor="search" className="mb-2 text-lg">Rechercher</label>
-        <div className="relative">
-          <input
-            type="text"
-            id="search"
-            value={search}
-            onChange={handleSearchChange}
-            className="p-3 pl-5 pr-10 rounded-full w-full text-black"
-            placeholder="Rechercher une ville, un pays..."
-          />
-          <span className="absolute right-3 top-3 text-black">
-            <FaSearch size={20} />
-          </span>
+    <div className="flex flex-col min-h-screen justify-between bg-[#2D2C5A] text-white">
+      <header className="flex justify-between items-center p-5 bg-[#2D2C5A]">
+        <div className="flex items-center">
+          <img src="../../public/logo.png" alt="Logo météo" className="h-10" />
+          <p className="ml-4 text-white">Météo</p>
         </div>
-      </form>
-    </div>
+        <div className="flex space-x-4">
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+            <FaTwitter className="text-white h-6 w-6 hover:text-blue-400" />
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+            <FaInstagram className="text-white h-6 w-6 hover:text-pink-500" />
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+            <FaFacebook className="text-white h-6 w-6 hover:text-blue-600" />
+          </a>
+        </div>
+      </header>
 
-    {/* Affichage des données météo */}
-    <div className="flex flex-col items-center text-white bg-transparent p-6 rounded-lg space-y-4 max-w-lg mx-auto mt-10">
-      {error && <p className="text-red-500">{error}</p>}
-      {weatherData && (
-        <>
-          {/* Ville */}
-          <div className="flex justify-between w-full">
-            <div>
-              <p className="text-lg font-semibold">{weatherData.city}, {weatherData.country}</p>
-              <p className="text-sm text-gray-500">{weatherData.description}</p>
-            </div>
-            <img src={weatherData.icon} alt="Icône du temps clair" className="h-16 w-16" />
+      {/* Barre de recherche */}
+      <div className="px-5 mt-1 flex flex-col">
+        <form onSubmit={handleSearchSubmit}>
+          <label htmlFor="search" className="mb-2 text-lg">Rechercher</label>
+          <div className="relative">
+            <input
+              type="text"
+              id="search"
+              value={search}
+              onChange={handleSearchChange}
+              className="p-3 pl-5 pr-10 rounded-full w-full text-black"
+              placeholder="Rechercher une ville, un pays..."
+            />
+            <span className="absolute right-3 top-3 text-black">
+              <FaSearch size={20} />
+            </span>
           </div>
+        </form>
+      </div>
 
-          {/* Température */}
-          <p className="text-5xl font-bold">{weatherData.temp}°C</p>
-
-          {/* Informations supplémentaires */}
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            {/* Humidité */}
-            <div>
-              <p className="text-sm text-gray-500">Humidity</p>
-              <p className="text-lg font-semibold">{weatherData.humidity}%</p>
+      {/* Affichage des données météo */}
+      <div className="flex flex-col items-center text-white bg-transparent p-6 rounded-lg space-y-4 max-w-lg mx-auto mt-10">
+        {error && <p className="text-red-500">{error}</p>}
+        {weatherData && (
+          <>
+            {/* Ville */}
+            <div className="flex justify-between w-full">
+              <div>
+                <p className="text-lg font-semibold">{weatherData.city}, {weatherData.country}</p>
+                <p className="text-sm text-gray-500">{weatherData.description}</p>
+              </div>
+              <img src={weatherData.icon} alt="Icône du temps clair" className="h-16 w-16" />
             </div>
 
-            {/* Vitesse du vent */}
-            <div>
-              <p className="text-sm text-gray-500">Wind Speed</p>
-              <p className="text-lg font-semibold">{weatherData.wind} Km/h</p>
+            {/* Température */}
+            <p className="text-5xl font-bold">
+              {convertTemperature(weatherData.temp, tempUnit)}{tempUnit}
+            </p>
+
+            {/* Informations supplémentaires */}
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              {/* Humidité */}
+              <div>
+                <p className="text-sm text-gray-500">Humidity</p>
+                <p className="text-lg font-semibold">{weatherData.humidity}%</p>
+              </div>
+
+              {/* Vitesse du vent */}
+              <div>
+                <p className="text-sm text-gray-500">Wind Speed</p>
+                <p className="text-lg font-semibold">{convertWindSpeed(weatherData.wind, windUnit)} {windUnit}</p>
+              </div>
+
+              {/* Pression */}
+              <div>
+                <p className="text-sm text-gray-500">Pressure</p>
+                <p className="text-lg font-semibold">{weatherData.pressure} hPa</p>
+              </div>
             </div>
 
-            {/* Pression */}
-            <div>
-              <p className="text-sm text-gray-500">Pressure</p>
-              <p className="text-lg font-semibold">{weatherData.pressure} hPa</p>
+            {/* Heure du lever et coucher du soleil */}
+            <div className="flex flex-col space-y-2 mt-4">
+              <div className="flex items-center space-x-2">
+                <FiSunrise className="w-6 h-6 text-yellow-500" />
+                <p className="text-lg">
+                  {moment.unix(weatherData.sunrise).utcOffset(weatherData.timezone / 60).format('HH:mm')}
+                </p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <FiSunset className="w-6 h-6 text-orange-500" />
+                <p className="text-lg">
+                  {moment.unix(weatherData.sunset).utcOffset(weatherData.timezone / 60).format('HH:mm')}
+                </p>
+              </div>
             </div>
-          </div>
 
-          {/* Heure du lever et coucher du soleil */}
-          <div className="flex flex-col space-y-2 mt-4">
+            {/* Visibilité */}
             <div className="flex items-center space-x-2">
-              <FiSunrise className="w-6 h-6 text-yellow-500" />
-              <p className="text-lg">
-                {moment.unix(weatherData.sunrise).utcOffset(weatherData.timezone / 60).format('HH:mm')}
-              </p>
+              <MdOutlineVisibility className="w-6 h-6" />
+              <p className="text-lg">{(weatherData.visibility / 1000).toFixed(1)} km</p>
             </div>
-            <div className="flex items-center space-x-2">
-              <FiSunset className="w-6 h-6 text-orange-500" />
-              <p className="text-lg">
-                {moment.unix(weatherData.sunset).utcOffset(weatherData.timezone / 60).format('HH:mm')}
-              </p>
-            </div>
-          </div>
+          </>
+        )}
+      </div>
 
-          {/* Visibilité */}
-          <div className="flex items-center space-x-2">
-            <MdOutlineVisibility className="w-6 h-6" />
-            <p className="text-lg">{(weatherData.visibility / 1000).toFixed(1)} km</p>
-          </div>
-        </>
-      )}
+      {/* Footer */}
+      <Footer />
     </div>
-
-    {/* Footer */}
-    <Footer />
-  </div>
-);
-
-
+  );
 };
