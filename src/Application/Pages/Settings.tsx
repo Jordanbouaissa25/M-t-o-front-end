@@ -27,6 +27,7 @@ export const SettingsPage: React.FC = () => {
       }
 
       try {
+        console.log(user_id)
         const response = await http.get(`/setting/${user_id}`);
         if (response.status === 200) {
           const tempUnitFromServer = response.data.setting_temperature;

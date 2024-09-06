@@ -93,7 +93,7 @@ async function connexion(username: string, password: string) {
               type="password" 
               value={password} 
               onChange={handlePasswordChange} 
-              placeholder="Mot de passe" 
+              placeholder="**************" 
               className="w-full p-2.5 rounded border border-gray-300 text-black bg-white"
               required 
             />
