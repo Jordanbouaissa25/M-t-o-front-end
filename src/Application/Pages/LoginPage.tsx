@@ -55,20 +55,10 @@ async function connexion(username: string, password: string) {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-[#1c2448] text-white">
-      <header className="w-full flex justify-between items-center bg-[#1c2448] px-5 py-2.5 h-12">
-        <div className="relative">
-          {/* Logo container */}
-        </div>
-        <div className="flex">
-          <i className="search-icon text-xl ml-2.5"></i>
-          <i className="menu-icon text-xl ml-2.5"></i>
-        </div>
-      </header>
-      
+    <div className="flex flex-col justify-center items-center min-h-screen bg-[#2D2C5A] text-white"> 
       <div className="flex flex-col items-center justify-center w-full">
-        <form onSubmit={(e)=>{e.preventDefault();connexion(email, password)}} className="bg-[#2d3658] p-5 rounded-lg shadow-md w-[300px] text-center">
-          <h2 className="mb-5 text-2xl">Se connecter</h2>
+        <form onSubmit={(e)=>{e.preventDefault();connexion(email, password)}} className="p-5 rounded-lg w-[300px] text-center">
+          <h2 className="mb-6 text-2xl font-semibold">Se connecter</h2>
           
           <p className="text-red-500 mb-4">{error}</p>
 
@@ -109,21 +99,23 @@ async function connexion(username: string, password: string) {
               /> 
               Se souvenir de moi
             </label>
-            <NavLink to="/reset" className="text-[#007bff] ml-4">Mot de passe oublié ?</NavLink>
           </div>
-
-          <button type="submit" className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg mb-3 cursor-pointer">
+          <button type="submit" className="w-full p-2.5 bg-[#f8c700] rounded text-[#2D2C5A] text-lg mb-5 cursor-pointer">
             Connectez-vous
           </button>
-          <div className="relative w-full h-1 bg-[#007bff] mb-6">
-            <div className="absolute left-0 h-1 bg-[#f8c700]" style={{ width: '50%' }}></div>
+          <div className="my-4">
+            <div className="relative w-full h-1 bg-[#007bff] mb-6"> 
+              <div className="absolute left-0 h-1 bg-[#f8c700]" style={{ width: "50%" }} ></div>
           </div>
+          </div>
+          <p className="p-3">Vous n'avez pas de compte ?</p>
           <div className="flex justify-between mb-3 text-sm">
             <button onClick={() => navigate("/register")} className="w-full p-2.5 bg-[#007bff] mt-0 rounded text-[#000000] text-lg cursor-pointer">
               Créer mon compte
             </button>
           </div>
         </form>
+            <NavLink to="/reset" className="text-[#007bff] ml-4 text-lg">Mot de passe oublié ?</NavLink>
       </div>
     </div>
   );

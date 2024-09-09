@@ -37,16 +37,19 @@ export const RegisterPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-[#1c2448] text-white p-4">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-[#2D2C5A] text-white p-4">
       <form
         onSubmit={(e) => {
           e.preventDefault();
           inscription(email, password, confirmPassword);
         }}
-        className="bg-[#2d3658] p-6 rounded-lg shadow-md w-[300px] text-center"
+        className="p-6 rounded-lg w-[300px] text-center"
       >
         <h2 className="mb-6 text-2xl font-semibold">S'inscrire</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
+        <div className="relative right-20">
+            <label htmlFor="mail" className="mb-2 text-md">Adresse mail</label>
+          </div>
         <div className="mb-4">
           <input
             type="email"
@@ -57,6 +60,9 @@ export const RegisterPage: React.FC = () => {
             required
           />
         </div>
+        <div className="relative right-20">
+            <label htmlFor="password">Mot de passe</label>
+          </div>
         <div className="mb-4">
           <input
             type="password"
@@ -67,6 +73,9 @@ export const RegisterPage: React.FC = () => {
             required
           />
         </div>
+        <div className="relative right-8">
+            <label htmlFor="password">Confirmation mot de passe</label>
+          </div>
         <div className="mb-4">
           <input
             type="password"
@@ -82,11 +91,13 @@ export const RegisterPage: React.FC = () => {
           <label htmlFor="terms" className="texte-sm">J'accepte les conditions générales d'utilisation</label>
            </div>
             <button type="submit" className="w-full p-2.5 bg-[#007bff] rounded text-white text-lg mb-4 cursor-pointer" > Créer mon compte </button>
+            <div className="my-3">
              <div className="relative w-full h-1 bg-[#f8c700] mb-6"> <div className="absolute left-0 h-1 bg-[#007bff]" style={{ width: "50%" }} ></div>
+             </div>
               </div>
                <div className="text-center">
                  <p className="text-sm mb-2">Vous avez déjà un compte ?</p>
-                  <button onClick={() => navigate("/")} className="w-full p-2.5 bg-[#f8c700] rounded text-[#1c2448] text-lg cursor-pointer" > Connectez-vous </button>
+                  <button onClick={() => navigate("/")} className="w-full p-2.5 bg-[#f8c700] rounded text-[#2D2C5A] text-lg cursor-pointer" > Connectez-vous </button>
                    </div> 
                   </form>
                     </div> ); };

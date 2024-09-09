@@ -26,11 +26,9 @@ async function reinitialisation(email: string, newPassword: string) {
   }
 }
 
-   
-
   return (
-    <div className="flex flex-col items-center min-h-screen bg-[#1c2448] text-white p-4">
-      <form onSubmit={(e)=>{e.preventDefault();reinitialisation(email, password)}} className="bg-[#2d3658] p-6 rounded-lg shadow-md w-[300px] text-center">
+    <div className="flex flex-col justify-center items-center min-h-screen bg-[#2D2C5A] text-white p-4">
+      <form onSubmit={(e)=>{e.preventDefault();reinitialisation(email, password)}} className="p-6 rounded-lg w-[300px] text-center">
         <h2 className="mb-6 text-2xl font-semibold">Réinitialisation mot de passe</h2>
 
         <div className="mb-4">
@@ -82,7 +80,7 @@ async function reinitialisation(email: string, newPassword: string) {
           Récupérer mon compte
         </button>
 
-        <div className="relative w-full h-1 bg-[#f8c700] mb-6">
+        <div className="relative w-full h-1 bg-[#f8c700] mb-6 my-4">
           <div className="absolute left-0 h-1 bg-[#007bff]" style={{ width: '50%' }}></div>
         </div>
 

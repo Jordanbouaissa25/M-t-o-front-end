@@ -101,7 +101,7 @@ export const SearchPage: React.FC = () => {
       }
     } catch (err) {
       console.error("Erreur lors de l'appel au backend :", err);
-      setError("Erreur de communication avec le serveur. Veuillez réessayer.");
+      setError("Ville non trouvé, veuillez réessayer.");
       setWeatherData(null);
     }
   };
@@ -167,7 +167,7 @@ export const SearchPage: React.FC = () => {
       </header>
 
       {/* Barre de recherche */}
-      <div className="px-5 mt-1 flex flex-col">
+      <div className="px-5 mt-1 flex flex-col lg:items-center">
         <form onSubmit={handleSearchSubmit}>
           <label htmlFor="search" className="mb-2 text-lg">Rechercher</label>
           <div className="relative">
@@ -176,7 +176,7 @@ export const SearchPage: React.FC = () => {
               id="search"
               value={search}
               onChange={handleSearchChange}
-              className="p-3 pl-5 pr-10 rounded-full w-full text-black"
+              className="p-3 pl-5 pr-10 rounded-full w-full lg:w-[350px] text-black"
               placeholder="Rechercher une ville, un pays..."
             />
             <span className="absolute right-3 top-3 text-black">
