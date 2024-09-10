@@ -35,7 +35,7 @@ interface WeatherData {
   icon: string;
   country: string;
   timezone: number;
-  pressure: number
+  pressure: number;
 }
 
 // Ajouter un interceptor pour inclure le token dans chaque requête
@@ -52,6 +52,7 @@ http.interceptors.request.use(
 
 export const SearchPage: React.FC = () => {
   const [search, setSearch] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [tempUnit, setTempUnit] = useState<string>('°C'); 
@@ -76,7 +77,308 @@ export const SearchPage: React.FC = () => {
     "13n": snow_icon,
     "50d": mist_icon,
     "50n": mist_icon
-  }
+  };
+
+  const cities = [
+    "Paris",
+    "Marseille",
+    "Lyon",
+    "Toulouse",
+    "Nice",
+    "Nantes",
+    "Montpellier",
+    "Strasbourg",
+    "Bordeaux",
+    "Lille",
+    "Abu Dhabi", // Émirats Arabes Unis
+    "Accra", // Ghana
+    "Addis-Abeba", // Éthiopie
+    "Alger", // Algérie
+    "Amman", // Jordanie
+    "Amsterdam", // Pays-Bas
+    "Andorre-la-Vieille", // Andorre
+    "Athènes", // Grèce
+    "Besançon",
+    "Belfort",
+    "Bagdad", // Irak
+    "Baku", // Azerbaïdjan
+    "Bamako", // Mali
+    "Bangkok", // Thaïlande
+    "Banjul", // Gambie
+    "Basseterre", // Saint-Christophe-et-Niévès
+    "Beijing", // Chine
+    "Belgrade", // Serbie
+    "Berlin", // Allemagne
+    "Bern", // Suisse
+    "Bissau", // Guinée-Bissau
+    "Bogotá", // Colombie
+    "Brasilia", // Brésil
+    "Bratislava", // Slovaquie
+    "Brazzaville", // Congo-Brazzaville
+    "Bruxelles", // Belgique
+    "Bucarest", // Roumanie
+    "Budapest", // Hongrie
+    "Buenos Aires", // Argentine
+    "Le Caire", // Égypte
+    "Canberra", // Australie
+    "Caracas", // Venezuela
+    "Castries", // Sainte-Lucie
+    "Colombo", // Sri Lanka
+    "Conakry", // Guinée
+    "Damas", // Syrie
+    "Dhaka", // Bangladesh
+    "Dili", // Timor oriental
+    "Djibouti", // Djibouti
+    "Dodoma", // Tanzanie
+    "Dushanbé", // Tadjikistan
+    "Erevan", // Arménie
+    "Helsinki", // Finlande
+    "Islamabad", // Pakistan
+    "Jakarta", // Indonésie
+    "Juba", // Soudan du Sud
+    "Kampala", // Ouganda
+    "Katmandou", // Népal
+    "Kigali", // Rwanda
+    "Kinshasa", // Congo-Kinshasa
+    "Kuala Lumpur", // Malaisie
+    "Kuwait", // Koweït
+    "Libreville", // Gabon
+    "Lima", // Pérou
+    "Lisbonne", // Portugal
+    "Ljubljana", // Slovénie
+    "Londres", // Royaume-Uni
+    "Luanda", // Angola
+    "Lusaka", // Zambie
+    "Madrid", // Espagne
+    "Malabo", // Guinée équatoriale
+    "Manille", // Philippines
+    "Minsk", // Biélorussie
+    "Moscou", // Russie
+    "Monrovia", // Libéria
+    "Montbéliard",
+    "Montevideo", // Uruguay
+    "Moroni", // Comores
+    "Mulhouse",
+    "Nairobi", // Kenya
+    "Nassau", // Bahamas
+    "Ngerulmud", // Palau
+    "Niamey", // Niger
+    "Nicosie", // Chypre
+    "Nouakchott", // Mauritanie
+    "Ouagadougou", // Burkina Faso
+    "Port-au-Prince", // Haïti
+    "Port Moresby", // Papouasie-Nouvelle-Guinée
+    "Prague", // République tchèque
+    "Rabat", // Maroc
+    "Réunion", // Réunion
+    "Riga", // Lettonie
+    "Rome", // Italie
+    "San Salvador", // Salvador
+    "Sanaa", // Yémen
+    "São Tomé", // São Tomé-et-Principe
+    "Sarajevo", // Bosnie-Herzégovine
+    "Tbilissi", // Géorgie
+    "Téhéran", // Iran
+    "Tirana", // Albanie
+    "Tokyo", // Japon
+    "Tripoli", // Libye
+    "Tunis", // Tunisie
+    "Ulaanbaatar", // Mongolie
+    "Vaduz", // Liechtenstein
+    "Valparaíso", // Chili
+    "Varsovie", // Pologne
+    "Vienne", // Autriche
+    "Vilnius", // Lituanie
+    "Washington D.C.", // États-Unis
+    "Wellington", // Nouvelle-Zélande
+    "Zagreb", // Croatie
+    "Zurich", // Suisse
+    "Asunción", // Paraguay
+    "Honiara", // Îles Salomon
+    "Kingston", // Jamaïque
+    "Lima", // Pérou
+    "Malabo", // Guinée équatoriale
+    "Managua", // Nicaragua
+    "Maseru", // Lesotho
+    "Mogadiscio", // Somalie
+    "Port Moresby", // Papouasie-Nouvelle-Guinée
+    "San Salvador", // Salvador
+    "Tegucigalpa", // Honduras
+    "Tbilissi", // Géorgie
+    "Yamoussoukro", // Côte d'Ivoire
+    "Zagreb", // Croatie
+    "Zurich", // Suisse
+     "New York", // États-Unis
+  "Los Angeles", // États-Unis
+  "Chicago", // États-Unis
+  "Houston", // États-Unis
+  "Philadelphia", // États-Unis
+  "San Antonio", // États-Unis
+  "San Diego", // États-Unis
+  "Dallas", // États-Unis
+  "San Jose", // États-Unis
+  "Toronto", // Canada
+  "Montreal", // Canada
+  "Vancouver", // Canada
+  "Calgary", // Canada
+  "Edmonton", // Canada
+  "London", // Royaume-Uni
+  "Birmingham", // Royaume-Uni
+  "Manchester", // Royaume-Uni
+  "Glasgow", // Royaume-Uni
+  "Liverpool", // Royaume-Uni
+  "Edinburgh", // Royaume-Uni
+  "Belfast", // Royaume-Uni
+  "Madrid", // Espagne
+  "Barcelona", // Espagne
+  "Valencia", // Espagne
+  "Seville", // Espagne
+  "Zaragoza", // Espagne
+  "Málaga", // Espagne
+  "Las Palmas", // Espagne
+  "Granada", // Espagne
+  "Lisbon", // Portugal
+  "Porto", // Portugal
+  "Rome", // Italie
+  "Milan", // Italie
+  "Naples", // Italie
+  "Turin", // Italie
+  "Palermo", // Italie
+  "Genoa", // Italie
+  "Venice", // Italie
+  "Athens", // Grèce
+  "Thessaloniki", // Grèce
+  "Istanbul", // Turquie
+  "Ankara", // Turquie
+  "Izmir", // Turquie
+  "Dubai", // Émirats Arabes Unis
+  "Abu Dhabi", // Émirats Arabes Unis
+  "Riyadh", // Arabie Saoudite
+  "Jeddah", // Arabie Saoudite
+  "Cairo", // Égypte
+  "Alexandria", // Égypte
+  "Hurghada",
+  "Assouan",
+  "Luxor",
+  "Phuket",
+  "Pékin",
+  "Cape Town", // Afrique du Sud
+  "Johannesburg", // Afrique du Sud
+  "Nairobi", // Kenya
+  "Lagos", // Nigéria
+  "Abuja", // Nigéria
+  "Kinshasa", // République Démocratique du Congo
+  "Luanda", // Angola
+  "Sao Paulo", // Brésil
+  "Rio de Janeiro", // Brésil
+  "Brasilia", // Brésil
+  "Belo Horizonte", // Brésil
+  "Porto Alegre", // Brésil
+  "Buenos Aires", // Argentine
+  "Córdoba", // Argentine
+  "Rosario", // Argentine
+  "Santiago", // Chili
+  "Valparaíso", // Chili
+  "Montevideo", // Uruguay
+  "Asunción", // Paraguay
+  "Bogotá", // Colombie
+  "Medellín", // Colombie
+  "Quito", // Équateur
+  "Lima", // Pérou
+  "Caracas", // Venezuela
+  "San Juan", // Porto Rico
+  "Mexico City", // Mexique
+  "Guadalajara", // Mexique
+  "Monterrey", // Mexique
+  "Toronto", // Canada
+  "Vancouver", // Canada
+  "Montreal", // Canada
+  "Calgary", // Canada
+  "Edmonton", // Canada
+  "Sydney", // Australie
+  "Melbourne", // Australie
+  "Brisbane", // Australie
+  "Perth", // Australie
+  "Adelaide", // Australie
+  "Wellington", // Nouvelle-Zélande
+  "Auckland", // Nouvelle-Zélande
+  "Helsinki", // Finlande
+  "Stockholm", // Suède
+  "Oslo", // Norvège
+  "Copenhague", // Danemark
+  "Reykjavik", // Islande
+  "Dublin", // Irlande
+  "Bruxelles", // Belgique
+  "Amsterdam", // Pays-Bas
+  "Zurich", // Suisse
+  "Geneva", // Suisse
+  "Vienna", // Autriche
+  "Budapest", // Hongrie
+  "Prague", // République Tchèque
+  "Warsaw", // Pologne
+  "Kiev", // Ukraine
+  "Minsk", // Biélorussie
+  "Chisinau", // Moldavie
+  "Bucharest", // Roumanie
+  "Sofia", // Bulgarie
+  "Belgrade", // Serbie
+  "Sarajevo", // Bosnie-Herzégovine
+  "Zagreb", // Croatie
+  "Ljubljana", // Slovénie
+  "Bratislava", // Slovaquie
+  "Sofia", // Bulgarie
+  "Vilnius", // Lituanie
+  "Riga", // Lettonie
+  "Tallinn", // Estonie
+  "Belgrade", // Serbie
+  "Podgorica", // Monténégro
+  "Tirana", // Albanie
+  "Skopje", // Macédoine du Nord
+  "Yerevan", // Arménie
+  "Tbilisi", // Géorgie
+  "Baku", // Azerbaïdjan
+  "Ashgabat", // Turkménistan
+  "Dushanbe", // Tadjikistan
+  "Islamabad", // Pakistan
+  "Kabul", // Afghanistan
+  "Tehran", // Iran
+  "Damascus", // Syrie
+  "Beirut", // Liban
+  "Riyadh", // Arabie Saoudite
+  "Jeddah", // Arabie Saoudite
+  "Abu Dhabi", // Émirats Arabes Unis
+  "Doha", // Qatar
+  "Manama", // Bahreïn
+  "Kuwait City", // Koweït
+  "Muscat", // Oman
+  "Sanaa", // Yémen
+  "Hanoi", // Vietnam
+  "Ho Chi Minh Ville", // Vietnam
+  "Bangkok", // Thaïlande
+  "Manila", // Philippines
+  "Kuala Lumpur", // Malaisie
+  "Singapore", // Singapour
+  "Tokyo", // Japon
+  "Seoul", // Corée du Sud
+  "Pyongyang", // Corée du Nord
+  "Ulaanbaatar", // Mongolie
+  "Osaka", // Japon
+  "Nagoya", // Japon
+  "Kyoto", // Japon
+  "Fukuoka", // Japon
+  "Hiroshima", // Japon
+  "Hokkaido", // Japon
+  "Seoul", // Corée du Sud
+  "Busan", // Corée du Sud
+  "Incheon", // Corée du Sud
+  "Gwangju", // Corée du Sud
+  "Daejeon", // Corée du Sud
+  "Helsinki", // Finlande
+  "Stockholm", // Suède
+  "Oslo", // Norvège
+  "Copenhague", // Danemark
+  "Reykjavik", // Islande
+  ];
 
   const fetchWeatherData = async (city: string) => {
     try {
@@ -101,12 +403,10 @@ export const SearchPage: React.FC = () => {
       }
     } catch (err) {
       console.error("Erreur lors de l'appel au backend :", err);
-      setError("Ville non trouvé, veuillez réessayer.");
+      setError("Ville non trouvée, veuillez réessayer.");
       setWeatherData(null);
     }
   };
-
-  console.log(weatherData)
 
   const fetchSettings = async () => {
     try {
@@ -126,11 +426,11 @@ export const SearchPage: React.FC = () => {
   useEffect(() => {
     fetchSettings();
   }, []);
-   
+
   const convertTemperature = (temp: number, unit: string) => {
-  const convertedTemp = unit === '°F' ? (temp * 9) / 5 + 32 : temp;
-  return Math.round(convertedTemp);
-};
+    const convertedTemp = unit === '°F' ? (temp * 9) / 5 + 32 : temp;
+    return Math.round(convertedTemp);
+  };
 
   const convertWindSpeed = (wind: number, unit: string) => {
     const convertedWind = unit === 'mi/h' ? wind / 1.609 : wind;
@@ -138,12 +438,29 @@ export const SearchPage: React.FC = () => {
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+    const query = e.target.value;
+    setSearch(query);
+
+    // Générer des suggestions basées sur les villes
+    if (query) {
+      setSuggestions(cities.filter(city =>
+        city.toLowerCase().includes(query.toLowerCase())
+      ));
+    } else {
+      setSuggestions([]);
+    }
   };
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetchWeatherData(search);
+    setSuggestions([]); // Efface les suggestions après la soumission
+  };
+
+  const handleSuggestionClick = (city: string) => {
+    setSearch(city);
+    fetchWeatherData(city);
+    setSuggestions([]); // Efface les suggestions après la sélection
   };
 
   return (
@@ -182,6 +499,19 @@ export const SearchPage: React.FC = () => {
             <span className="absolute right-3 top-3 text-black">
               <FaSearch size={20} />
             </span>
+            {suggestions.length > 0 && (
+              <ul className="absolute top-full left-0 right-0 bg-white text-black rounded-lg mt-1">
+                {suggestions.map((city, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleSuggestionClick(city)}
+                    className="p-2 hover:bg-gray-200 cursor-pointer"
+                  >
+                    {city}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </form>
       </div>
