@@ -231,7 +231,7 @@ export const SearchPage: React.FC = () => {
   "Belfast", // Royaume-Uni
   "Madrid", // Espagne
   "Barcelona", // Espagne
-  "Valencia", // Espagne
+  "Valence", // Espagne
   "Seville", // Espagne
   "Zaragoza", // Espagne
   "Málaga", // Espagne
@@ -292,7 +292,6 @@ export const SearchPage: React.FC = () => {
   "Monterrey", // Mexique
   "Toronto", // Canada
   "Vancouver", // Canada
-  "Montreal", // Canada
   "Calgary", // Canada
   "Edmonton", // Canada
   "Sydney", // Australie
@@ -468,7 +467,7 @@ export const SearchPage: React.FC = () => {
       <header className="flex justify-between items-center p-5 bg-[#2D2C5A]">
         <div className="flex items-center">
           <img src="../../public/logo.png" alt="Logo météo" className="h-10" />
-          <p className="ml-4 text-white">Météo</p>
+          <p className="ml-4 text-white">WorldWeather</p>
         </div>
         <div className="flex space-x-4">
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">

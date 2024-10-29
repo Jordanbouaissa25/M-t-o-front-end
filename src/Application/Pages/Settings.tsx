@@ -108,7 +108,7 @@ async function reinitialisation(email: string) {
       <header className="flex justify-between items-center p-5 bg-[#2D2C5A]">
         <div className="flex items-center">
           <img src="../../public/logo.png" alt="Logo météo" className="h-10" />
-          <p className='ml-4 text-white'>Météo</p>
+          <p className='ml-4 text-white'>WorldWeather</p>
         </div>
         <div className="flex space-x-4">
         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
@@ -150,14 +150,14 @@ async function reinitialisation(email: string) {
           </select>
         </div>
 
-        <form onSubmit={(e)=>{e.preventDefault();reinitialisation(email)}} className="mt-4 w-full">
+        <form onSubmit={(e)=>{e.preventDefault();reinitialisation(email)}} className="mt-4 w-full lg:w-[350px]">
           <h3 className="text-lg mb-2 text-white">Modifier adresse mail</h3>
           <input
             type="email"
             value={email}
             onChange={handleNewEmailChange}
             placeholder="Nouvelle adresse mail"
-            className="w-full p-2.5 rounded border border-gray-300 text-black bg-white mb-4"
+            className="w-full p-2.5 rounded border border-gray-300 text-black bg-white mb-4 lg:w-[350px]"
             required
           />
           <button
@@ -168,16 +168,7 @@ async function reinitialisation(email: string) {
           </button>
         </form>
 
-        <form className="mt-4 w-full">
-          {/* <h3 className="text-lg mb-2 text-white">Modifier mot de passe</h3> */}
-          {/* <input
-            type="password"
-            value={newPassword}
-            onChange={handleNewPasswordChange}
-            placeholder="Nouveau mot de passe"
-            className="w-full p-2.5 rounded border border-gray-300 text-black bg-white mb-4"
-            required
-          /> */}
+        <form className="mt-4 w-full lg:w-[350px]">
           <NavLink to="/reset">
           <button
             type="submit"
