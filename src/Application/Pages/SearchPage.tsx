@@ -82,6 +82,7 @@ export const SearchPage: React.FC = () => {
   const cities = [
     "Paris",
     "Marseille",
+    "Audincourt",
     "Lyon",
     "Toulouse",
     "Nice",
@@ -117,7 +118,6 @@ export const SearchPage: React.FC = () => {
     "Brazzaville", // Congo-Brazzaville
     "Bruxelles", // Belgique
     "Bucarest", // Roumanie
-    "Budapest", // Hongrie
     "Buenos Aires", // Argentine
     "Le Caire", // Égypte
     "Canberra", // Australie
