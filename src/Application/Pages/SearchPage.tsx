@@ -80,6 +80,7 @@ export const SearchPage: React.FC = () => {
   };
 
   const cities = [
+    "Antalya",
     "Paris",
     "Marseille",
     "Audincourt",
